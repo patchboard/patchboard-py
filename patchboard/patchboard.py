@@ -6,6 +6,7 @@
 import json
 
 from api import API
+from schema_manager import SchemaManager
 
 
 def discover(url):
@@ -28,6 +29,8 @@ class Patchboard(object):
 
     def __init__(self, api_spec):
         self.api = API(api_spec)
+
+        self.schema_manager = SchemaManager(self.api.schemas)
 
         self.resource_classes = self.create_resource_classes()
 
