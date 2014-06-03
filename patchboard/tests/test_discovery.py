@@ -7,4 +7,4 @@ from patchboard import discover, Patchboard
 
 
 def test_discover():
-    assert isinstance(discover("my.server.com"), Patchboard)
+    assert isinstance(discover(u"patchboard/api.json"), Patchboard)
