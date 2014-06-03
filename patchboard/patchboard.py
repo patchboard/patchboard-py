@@ -34,9 +34,9 @@ class Patchboard(object):
         # Debugging only
         self.json = api_spec
 
-#    def create_classes(self):
-#        classes = {}
-#        for name, mapping in self.api.mappings.iteritems():
+    def create_classes(self):
+        classes = {}
+        for name, mapping in self.api.mappings.iteritems():
 
     def spawn(self):
         pass
