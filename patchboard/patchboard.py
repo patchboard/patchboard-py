@@ -29,8 +29,14 @@ class Patchboard(object):
     def __init__(self, api_spec):
         self.api = API(api_spec)
 
+        self.create_classes()
+
         # Debugging only
         self.json = api_spec
+
+#    def create_classes(self):
+#        classes = {}
+#        for name, mapping in self.api.mappings.iteritems():
 
     def spawn(self):
         pass
