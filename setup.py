@@ -9,6 +9,7 @@ setup(name='patchboard',
       license='MIT',
       packages=['patchboard'],
       install_requires=[
+          'pytest',
       ],
       zip_safe=False)
 
