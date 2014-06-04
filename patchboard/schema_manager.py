@@ -13,22 +13,30 @@ class SchemaManager(object):
 
         self.schemas = schemas
         self.id_index = {}
+        self.name_index = {}
+        self.media_type_index = {}
 
         for schema_source in self.schemas:
             source_id = schema_source[u'id'].rstrip(u'#')
 
             for name, schema in schema_source['definitions'].iteritems():
-                if u'id' in schema:
-                    print("has id: {0}".format(schema[u'id']))
-                schema_id = schema.get(
-                    u'id',
-                    "{0}#{1}".format(source_id, name))
 
-                self.index_schema(schema_id, schema)
+                self.index_schema(source_id, name, schema)
 
-    def index_schema(self, schema_id, schema):
+    def index_schema(self, source_id, name, schema):
         # FIXME: extensions and refs are not imported
-        schema[u'id'] = schema_id
+
+        # Create id if it doesn't already exist
+        schema_id = schema.setdefault(
+            u'id', "{0}#{1}".format(source_id, name))
+
+        # Add to id index
         self.id_index[schema_id] = schema
 
-        name = schema_id.split(u'#')[1]
+        # Add to name index
+        self.name_index[name] = schema
+
+        # If we have a specified media type, add to that index
+        media_type = schema.get(u'mediaType', False)
+        if media_type:
+            self.media_type_index[media_type] = schema
