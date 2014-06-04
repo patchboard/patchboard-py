@@ -19,6 +19,7 @@ class API(object):
             value[name] = name
 
         # Handle schemas
+        # FIXME: test that schemas is really an array
         self.schemas = definition['schemas']
 
         # Handle mappings
