@@ -3,19 +3,20 @@
 # Copyright 2014 BitVault.
 
 
+import json
+
+
 from patchboard import discover
 
 
 def test_ids():
-    correct_schema_ids = []
-    with open(u"patchboard/tests/schema_ids.txt", u"r") as file:
-        for line in file:
-            correct_schema_ids.append(line.rstrip())
-    correct_schema_ids.sort()
+    with open(u"patchboard/tests/schema_id_index.json", u"r") as file:
+        correct_schema_id_index = json.load(file)
 
     pb = discover(u"patchboard/api.json")
     schema_manager = pb.schema_manager
-    schema_ids = schema_manager.id_index.keys()
-    schema_ids.sort()
+    schema_id_index = schema_manager.id_index
 
-    assert len(correct_schema_ids) == len(schema_ids)
+    # FIXME: someday need to verify the claim that this properly
+    # recurses through the data structures to test for equality
+    assert correct_schema_id_index == schema_id_index
