@@ -40,3 +40,14 @@ class SchemaManager(object):
         media_type = schema.get(u'mediaType', False)
         if media_type:
             self.media_type_index[media_type] = schema
+
+    # On lookup failures let KeyError propagate to the caller
+
+    def find_media_type(self, media_type):
+        return self.media_type_index[media_type]
+
+    def find_name(self, name):
+        return self.name_index[name]
+
+    def find_id(self, schema_id):
+        return self.id_index[schema_id]
