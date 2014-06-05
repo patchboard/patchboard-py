@@ -34,18 +34,37 @@ class Patchboard(object):
         self.api = API(api_spec)
 
         self.schema_manager = SchemaManager(self.api.schemas)
+        self.endpoint_classes = {}
+        self.create_endpoint_classes()
 
-        self.resource_classes = self.create_resource_classes()
-
-        # Debugging only
-        self.json = api_spec
-
-    def create_resource_classes(self):
+    # TODO: This looks like it can be simplified
+    def create_endpoint_classes(self):
         resource_classes = {}
-        for name, mapping in self.api.mappings.iteritems():
-            resource_classes[name] = u"<aclass>"
+        for resource_name, mapping in self.api.mappings.iteritems():
+            schema = self.schema_manager.find_name(resource_name)
 
-        return resource_classes
+            cls = resource_classes.setdefault(
+                resource_name,
+                self.create_class(
+                    resource_name,
+                    mapping.resource,
+                    schema,
+                    mapping))
+            self.endpoint_classes[resource_name] = cls
+
+    def create_class(self, resource_name, definition, schema, mapping):
+        # Cannot use unicode for class names
+        class_name = str(resource_name)
+        class_parents = (object,)
+        # TODO: fill in stub class definition
+        class_body = """
+def __init__(self):
+    pass
+        """
+        class_dict = {}
+        exec(class_body, globals(), class_dict)
+        cls = type(class_name, class_parents, class_dict)
+        return cls
 
     def spawn(self):
         pass

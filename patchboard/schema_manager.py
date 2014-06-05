@@ -44,13 +44,16 @@ class SchemaManager(object):
         if media_type:
             self.media_type_index[media_type] = schema
 
-    # On lookup failures let KeyError propagate to the caller
+    # TODO: consider making these properties so the usual dict
+    # methods can be used.
+    def find_media_type(self, media_type, default=None):
+        return self._find(self.media_type_index, media_type, default)
 
-    def find_media_type(self, media_type):
-        return self.media_type_index[media_type]
+    def find_name(self, name, default=None):
+        return self._find(self.name_index, name, default)
 
-    def find_name(self, name):
-        return self.name_index[name]
+    def find_id(self, schema_id, default=None):
+        return self._find(self.id_index, schema_id, default)
 
-    def find_id(self, schema_id):
-        return self.id_index[schema_id]
+    def _find(self, index, key, default=None):
+        return index.get(key, default)

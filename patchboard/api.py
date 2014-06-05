@@ -37,3 +37,4 @@ class Mapping(object):
         self.api = api
         self.name = name
         self.definition = definition
+        self.resource = definition[u"resource"]

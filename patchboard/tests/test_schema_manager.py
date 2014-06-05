@@ -54,10 +54,7 @@ def test_media_type_index(schema_manager):
 
 
 def test_find(schema_manager):
-    # This is almost pointless, given that the find functions are
-    # trivial accessors
-    with pytest.raises(KeyError):
-        schema_manager.find_name(u'not a schema name')
+    assert schema_manager.find_name(u'not a schema name') is None
 
     by_media_type = schema_manager.find_media_type(
         u'application/vnd.bitvault.transaction_signatures+json;version=1.0')
