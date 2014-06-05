@@ -43,12 +43,12 @@ class Patchboard(object):
         self.api = API(api_spec)
 
         self.schema_manager = SchemaManager(self.api.schemas)
-        self.endpoint_classes = {}
-        self.create_endpoint_classes()
+        self.endpoint_classes = self.create_endpoint_classes()
 
     def create_endpoint_classes(self):
+        classes = {}
         for resource_name, mapping in self.api.mappings.iteritems():
-            if resource_name not in self.endpoint_classes:
+            if resource_name not in classes:
                 schema = self.schema_manager.find_name(resource_name)
                 resource_def = mapping.resource
                 cls = self.create_class(
@@ -56,7 +56,9 @@ class Patchboard(object):
                     resource_def,
                     schema,
                     mapping)
-                self.endpoint_classes[resource_name] = cls
+                classes[resource_name] = cls
+
+        return classes
 
     def create_class(self, resource_name, definition, schema, mapping):
         # Cannot use unicode for class names
