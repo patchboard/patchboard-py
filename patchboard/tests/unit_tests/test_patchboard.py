@@ -7,12 +7,8 @@ from __future__ import print_function
 import json
 import pytest
 
-from patchboard import discover
-
-
-@pytest.fixture()
-def pb():
-    return discover(u"patchboard/api.json")
+from patchboard.tests.fixtures import pb
+pytest.mark.usefixtures(pb)
 
 
 def test_endpoint_classes(pb):

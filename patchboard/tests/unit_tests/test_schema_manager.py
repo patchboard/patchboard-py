@@ -7,17 +7,9 @@ from __future__ import print_function
 import json
 import pytest
 
-from patchboard import discover
 
-
-@pytest.fixture()
-def pb():
-    return discover(u"patchboard/api.json")
-
-
-@pytest.fixture()
-def schema_manager(pb):
-    return pb.schema_manager
+from patchboard.tests.fixtures import pb, schema_manager
+pytest.mark.usefixtures(pb, schema_manager)
 
 
 def test_id_index(schema_manager):

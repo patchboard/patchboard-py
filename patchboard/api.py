@@ -13,6 +13,8 @@ class API(object):
 
     def __init__(self, definition):
 
+        self.service_url = definition.get(u'service_url', None)
+
         # Handle resources
         self.resources = definition['resources']
         for name, value in self.resources.iteritems():

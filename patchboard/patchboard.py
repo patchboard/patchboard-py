@@ -10,6 +10,8 @@ import json
 
 from api import API
 from schema_manager import SchemaManager
+from client import Client
+from util import to_camel_case
 
 
 def discover(url):
@@ -25,15 +27,6 @@ def discover(url):
     return Patchboard(api_spec)
 
 
-# FIXME: this utility function should move somewhere appropriate
-def to_camel_case(string):
-    # Transform name to CamelCase
-    words = string.split('_')
-    capwords = [word.capitalize() for word in words]
-
-    return "".join(capwords)
-
-
 class Patchboard(object):
     """
     The primary client interface to a patchboard server.
@@ -44,6 +37,10 @@ class Patchboard(object):
 
         self.schema_manager = SchemaManager(self.api.schemas)
         self.endpoint_classes = self.create_endpoint_classes()
+        client = self.spawn()
+        # Appears to be unused
+        #self.resources = client.resources
+        self.context = client.context
 
     def create_endpoint_classes(self):
         classes = {}
@@ -75,5 +72,5 @@ def __init__(self):
         cls = type(class_name, class_parents, class_dict)
         return cls
 
-    def spawn(self):
-        pass
+    def spawn(self, context={}):
+        return Client(context, self.api, self.endpoint_classes)
