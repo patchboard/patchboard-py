@@ -28,3 +28,17 @@ def test_schemas(api):
         ruby_schemas = json.load(file)
 
     assert ruby_schemas == api.schemas
+
+
+def test_mappings(api):
+    with open(u"patchboard/tests/data/api_mappings.json", u"r") as file:
+        ruby_mappings = json.load(file)
+
+    # Should really parse the value object names and compare
+    ruby_keys = ruby_mappings.keys()
+    ruby_keys.sort()
+
+    python_keys = api.mappings.keys()
+    python_keys.sort()
+
+    assert ruby_keys == python_keys

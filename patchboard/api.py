@@ -29,8 +29,13 @@ class API(object):
         for name, mapping in definition['mappings'].iteritems():
             self.mappings[name] = Mapping(self, name, mapping)
 
-        # Don't have this right now
-        #self.service_url = definition['service_url']
+    def find_mapping(schema):
+        # TODO: implement!
+        pass
+
+    def decorate(context, schema, data):
+        # TODO: implement!
+        pass
 
 
 class Mapping(object):
