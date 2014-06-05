@@ -3,6 +3,9 @@
 # Copyright 2014 BitVault.
 
 
+from __future__ import print_function
+
+
 from patchboard import discover, Patchboard
 
 

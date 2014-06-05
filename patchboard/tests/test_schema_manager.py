@@ -65,5 +65,5 @@ def test_find(schema_manager):
     by_id = schema_manager.find_id(by_media_type[u'id'])
     assert by_id == by_media_type
 
-    by_name = schema_manager.find_name(by_media_type[u'id'].lstrip(u'#'))
+    by_name = schema_manager.find_name(by_media_type[u'id'].split(u'#')[1])
     assert by_name == by_media_type

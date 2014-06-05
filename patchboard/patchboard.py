@@ -3,6 +3,9 @@
 # Copyright 2014 BitVault.
 
 
+from __future__ import print_function
+
+
 import json
 
 from api import API
@@ -16,7 +19,7 @@ def discover(url):
     """
     # Retrieve JSON data from server
     # Treat url like a file and read mock JSON for now
-    with open(url, "r") as file:
+    with open(url, u"r") as file:
         api_spec = json.load(file)
 
     return Patchboard(api_spec)
@@ -40,7 +43,7 @@ class Patchboard(object):
     def create_resource_classes(self):
         resource_classes = {}
         for name, mapping in self.api.mappings.iteritems():
-            resource_classes[name] = "<aclass>"
+            resource_classes[name] = u"<aclass>"
 
         return resource_classes
 

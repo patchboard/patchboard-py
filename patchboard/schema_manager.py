@@ -22,7 +22,7 @@ class SchemaManager(object):
         for schema_source in self.schemas:
             source_id = schema_source[u'id'].rstrip(u'#')
 
-            for name, schema in schema_source['definitions'].iteritems():
+            for name, schema in schema_source[u'definitions'].iteritems():
 
                 self.index_schema(source_id, name, schema)
 
@@ -31,7 +31,7 @@ class SchemaManager(object):
 
         # Create id if it doesn't already exist
         schema_id = schema.setdefault(
-            u'id', "{0}#{1}".format(source_id, name))
+            u'id', u"{0}#{1}".format(source_id, name))
 
         # Add to id index
         self.id_index[schema_id] = schema
