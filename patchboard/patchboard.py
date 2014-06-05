@@ -46,20 +46,17 @@ class Patchboard(object):
         self.endpoint_classes = {}
         self.create_endpoint_classes()
 
-    # TODO: This looks like it can be simplified
     def create_endpoint_classes(self):
-        resource_classes = {}
         for resource_name, mapping in self.api.mappings.iteritems():
-            schema = self.schema_manager.find_name(resource_name)
-
-            cls = resource_classes.setdefault(
-                resource_name,
-                self.create_class(
+            if resource_name not in self.endpoint_classes:
+                schema = self.schema_manager.find_name(resource_name)
+                resource_def = mapping.resource
+                cls = self.create_class(
                     resource_name,
-                    mapping.resource,
+                    resource_def,
                     schema,
-                    mapping))
-            self.endpoint_classes[resource_name] = cls
+                    mapping)
+                self.endpoint_classes[resource_name] = cls
 
     def create_class(self, resource_name, definition, schema, mapping):
         # Cannot use unicode for class names
