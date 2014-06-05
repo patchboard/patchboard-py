@@ -25,6 +25,15 @@ def discover(url):
     return Patchboard(api_spec)
 
 
+# FIXME: this utility function should move somewhere appropriate
+def to_camel_case(string):
+    # Transform name to CamelCase
+    words = string.split('_')
+    capwords = [word.capitalize() for word in words]
+
+    return "".join(capwords)
+
+
 class Patchboard(object):
     """
     The primary client interface to a patchboard server.
@@ -54,7 +63,8 @@ class Patchboard(object):
 
     def create_class(self, resource_name, definition, schema, mapping):
         # Cannot use unicode for class names
-        class_name = str(resource_name)
+        class_name = to_camel_case(str(resource_name))
+
         class_parents = (object,)
         # TODO: fill in stub class definition
         class_body = """
