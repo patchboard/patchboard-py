@@ -21,3 +21,10 @@ def test_resources(api):
         ruby_resources = json.load(file)
 
     assert ruby_resources == api.resources
+
+
+def test_schemas(api):
+    with open(u"patchboard/tests/data/api_schemas.json", u"r") as file:
+        ruby_schemas = json.load(file)
+
+    assert ruby_schemas == api.schemas
