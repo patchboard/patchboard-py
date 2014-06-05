@@ -18,7 +18,7 @@ class API(object):
         # Handle resources
         self.resources = definition['resources']
         for name, value in self.resources.iteritems():
-            value[name] = name
+            value[u'name'] = name
 
         # Handle schemas
         # FIXME: test that schemas is really an array

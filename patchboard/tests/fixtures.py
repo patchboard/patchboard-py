@@ -16,5 +16,10 @@ def pb():
 
 
 @pytest.fixture(scope=u'class')
+def api(pb):
+    return pb.api
+
+
+@pytest.fixture(scope=u'class')
 def schema_manager(pb):
     return pb.schema_manager
