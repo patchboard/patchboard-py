@@ -7,6 +7,9 @@
 # from pprint import pprint
 
 
+from __future__ import print_function
+
+
 class SchemaManager(object):
 
     def __init__(self, schemas):

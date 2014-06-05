@@ -58,3 +58,12 @@ def test_find(schema_manager):
     # trivial accessors
     with pytest.raises(KeyError):
         schema_manager.find_name(u'not a schema name')
+
+    by_media_type = schema_manager.find_media_type(
+        u'application/vnd.bitvault.transaction_signatures+json;version=1.0')
+
+    by_id = schema_manager.find_id(by_media_type[u'id'])
+    assert by_id == by_media_type
+
+    by_name = schema_manager.find_name(by_media_type[u'id'].lstrip(u'#'))
+    assert by_name == by_media_type
