@@ -42,3 +42,8 @@ def test_mappings(api):
     python_keys.sort()
 
     assert ruby_keys == python_keys
+
+
+def test_find_mapping(api):
+    # TODO: implement!
+    pass

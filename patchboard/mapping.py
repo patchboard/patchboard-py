@@ -13,3 +13,5 @@ class Mapping(object):
         self.name = name
         self.definition = definition
         self.resource = definition[u"resource"]
+
+    # TODO: implement the rest!

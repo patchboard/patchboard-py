@@ -31,9 +31,13 @@ class API(object):
         for name, mapping in definition['mappings'].iteritems():
             self.mappings[name] = Mapping(self, name, mapping)
 
-    def find_mapping(schema):
-        # TODO: implement!
-        pass
+    def find_mapping(self, schema):
+        id = schema.get(u'id', None) or schema.get(u'$ref', None)
+        if id:
+            name = id.split(u'#').last
+            return self.mappings.get(name, None)
+        else:
+            return None
 
     def decorate(context, schema, data):
         # TODO: implement!
