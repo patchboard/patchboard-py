@@ -3,7 +3,9 @@
 # Copyright 2014 BitVault.
 
 
-#import json
+from __future__ import print_function
+
+from mapping import Mapping
 
 
 class API(object):
@@ -36,12 +38,3 @@ class API(object):
     def decorate(context, schema, data):
         # TODO: implement!
         pass
-
-
-class Mapping(object):
-
-    def __init__(self, api, name, definition):
-        self.api = api
-        self.name = name
-        self.definition = definition
-        self.resource = definition[u"resource"]
