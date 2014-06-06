@@ -7,6 +7,26 @@ from __future__ import print_function
 
 import json
 
+from exception import PatchboardError
+
+
+class ResourceType(type):
+    """A metaclass for resource classes."""
+
+    # Must override to supply  default arguments
+    def __new__(cls, name):
+        return type.__new__(cls, name, (Resource,), {})
+
+    def __init__(cls, name):
+        super(ResourceType, cls).__init__(name, (Resource,), {})
+
+        # Test method
+        def foo(self):
+            print("Foo!\n")
+        setattr(cls, 'foo', foo)
+
+        # TODO: add the rest of the methods
+
 
 class Resource(object):
 
@@ -39,7 +59,7 @@ class Resource(object):
         return (obj in self.attributes)
 
     def curl(self):
-        raise
+        raise PatchboardError(u"Resource.curl() not implemented")
 
     def to_hash(self):
         return self.attributes

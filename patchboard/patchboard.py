@@ -8,7 +8,7 @@ from __future__ import print_function
 
 import json
 
-from resource import Resource
+from resource import ResourceType
 from api import API
 from schema_manager import SchemaManager
 from client import Client
@@ -62,9 +62,7 @@ class Patchboard(object):
         # Cannot use unicode for class names
         class_name = to_camel_case(str(resource_name))
 
-        class_parents = (Resource,)
-        class_dict = {}
-        cls = type(class_name, class_parents, class_dict)
+        cls = ResourceType(class_name)
         return cls
 
     def spawn(self, context={}):
