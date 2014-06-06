@@ -31,3 +31,29 @@ def test_endpoint_classes(pb):
         assert (
             ruby_classes[key].split(u'::')[-1] ==
             python_classes[key].__name__)
+
+
+# This doesn't work well, as too many automatic methods get mixed
+# in in both languages.
+# FIXME: this will also pick up data attributes on the python side.
+def test_endpoint_object_methods(pb):
+    with open(
+            u"patchboard/tests/data/endpoint_object_methods.json", u"r") as file:
+        ruby_object_methods = json.load(file)
+
+    for key in ruby_object_methods.keys():
+        ruby_object_methods[key] = [
+            method for method in ruby_object_methods[key]
+            if method not in ("method_missing")]
+        ruby_object_methods[key].sort
+
+    python_object_methods = {}
+    for clsname, cls in pb.endpoint_classes.iteritems():
+        # Use dict so we don't see inherited methods
+        method_list = cls.__dict__.keys()
+        method_list = [method for method in method_list
+                       if method[0] != '_']
+        method_list.sort()
+        python_object_methods[clsname] = method_list
+
+    assert ruby_object_methods == python_object_methods
