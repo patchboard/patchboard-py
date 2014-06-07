@@ -62,7 +62,7 @@ class Patchboard(object):
         # Cannot use unicode for class names
         class_name = to_camel_case(str(resource_name))
 
-        cls = ResourceType(class_name)
+        cls = ResourceType(class_name, self, definition, schema, mapping)
         return cls
 
     def spawn(self, context={}):

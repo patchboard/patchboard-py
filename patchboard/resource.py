@@ -14,18 +14,19 @@ class ResourceType(type):
     """A metaclass for resource classes."""
 
     # Must override to supply  default arguments
-    def __new__(cls, name):
+    def __new__(cls, name, patchboard, definition, schema, mapping):
         return type.__new__(cls, name, (Resource,), {})
 
-    def __init__(cls, name):
+    def __init__(cls, name, patchboard, definition, schema, mapping):
         super(ResourceType, cls).__init__(name, (Resource,), {})
 
-        # Test method
-        def foo(self):
-            print("Foo!\n")
-        setattr(cls, 'foo', foo)
+        # TODO: add the methods in Resource::assemble()
 
-        # TODO: add the rest of the methods
+        # Incorrect, I think
+        #setattr(cls, u'api', patchboard.api)
+        if schema and (u'properties' in schema):
+            for name, schema_def in schema[u'properties'].iteritems():
+                setattr(cls, name, lambda(self): self.attributes[name])
 
 
 class Resource(object):
