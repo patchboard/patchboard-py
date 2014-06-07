@@ -42,10 +42,7 @@ def test_endpoint_object_methods(pb):
         ruby_object_methods = json.load(file)
 
     for key in ruby_object_methods.keys():
-        ruby_object_methods[key] = [
-            method for method in ruby_object_methods[key]
-            if method not in ("method_missing")]
-        ruby_object_methods[key].sort
+        ruby_object_methods[key] = sorted(ruby_object_methods[key])
 
     python_object_methods = {}
     for clsname, cls in pb.endpoint_classes.iteritems():
@@ -53,7 +50,6 @@ def test_endpoint_object_methods(pb):
         method_list = cls.__dict__.keys()
         method_list = [method for method in method_list
                        if method[0] != '_']
-        method_list.sort()
-        python_object_methods[clsname] = method_list
+        python_object_methods[clsname] = sorted(method_list)
 
     assert ruby_object_methods == python_object_methods
