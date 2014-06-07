@@ -20,16 +20,35 @@ class ResourceType(type):
     def __init__(cls, name, patchboard, definition, schema, mapping):
         super(ResourceType, cls).__init__(name, (Resource,), {})
 
-        # TODO: add the methods in Resource::assemble()
+        # TODO: add the singleton methods in Resource::assemble()
 
-        # Incorrect, I think
-        #setattr(cls, u'api', patchboard.api)
-        if schema and (u'properties' in schema):
-            for name, schema_def in schema[u'properties'].iteritems():
-                setattr(cls, name, lambda(self): self.attributes[name])
+        #setattr(cls, 'api', lambda(self): patchboard.api)
+
+        if schema:
+            if u'properties' in schema:
+                for name, schema_def in schema[u'properties'].iteritems():
+                    setattr(
+                        cls,
+                        name,
+                        lambda(self): self.attributes[name])
+
+            if schema.get(u'additionalProperties', False) is not False:
+                # FIXME: doesn't take the additional args in the ruby
+                # code.
+                setattr(
+                    cls,
+                    'method_missing',
+                    lambda(self, name): self.attributes[name])
+
+        for name, action in definition[u'actions'].iteritems():
+            # FIXME: create actions
+
+            # FIXME: implement
+            setattr(cls, name, lambda(self): False)
 
 
 class Resource(object):
+    """Base class for resources"""
 
     @classmethod
     def decorate(cls, instance, attributes):
