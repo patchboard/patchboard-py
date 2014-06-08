@@ -43,7 +43,7 @@ class ResourceType(type):
         for name, action in definition[u'actions'].iteritems():
             # FIXME: create actions
 
-            # FIXME: implement
+            # FIXME: implement correctly
             setattr(cls, name, lambda(self): False)
 
 
@@ -52,7 +52,16 @@ class Resource(object):
 
     @classmethod
     def decorate(cls, instance, attributes):
-        # TODO: implement! Or use a different system...
+        # TODO: non destructive decoration
+        # TODO: add some sort of validation for the input attributes.
+
+        if self.schema and u'properties' in self.schema:
+            context = instance.context
+            properties = self.schema[u'properties']
+            for key, sub_schema in properties.iteritems():
+                if key in attributes:
+                    value = attributes[key]
+
         return attributes
 
     def __init__(self, context, attributes={}):
