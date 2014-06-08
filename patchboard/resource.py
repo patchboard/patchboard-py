@@ -18,7 +18,6 @@ class ResourceType(type):
         return type.__new__(cls, name, (Resource,), {})
 
     def __init__(cls, name, patchboard, definition, schema, mapping):
-        super(ResourceType, cls).__init__(name, (Resource,), {})
 
         setattr(cls, 'api', classmethod(lambda(self_): patchboard.api))
 
@@ -53,6 +52,9 @@ class ResourceType(type):
 
             # FIXME: implement correctly
             setattr(cls, name, lambda(self): False)
+
+        # Must be called last
+        super(ResourceType, cls).__init__(name, (Resource,), {})
 
 
 class Resource(object):
