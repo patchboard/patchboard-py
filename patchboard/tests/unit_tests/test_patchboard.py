@@ -8,15 +8,15 @@ import json
 import pytest
 from inspect import isfunction
 
-from patchboard.tests.fixtures import pb
-pytest.mark.usefixtures(pb)
+from patchboard.tests.fixtures import mock_pb
+pytest.mark.usefixtures(mock_pb)
 
 
-def test_endpoint_classes(pb):
+def test_endpoint_classes(mock_pb):
     with open(u"patchboard/tests/data/endpoint_classes.json", u"r") as file:
         ruby_classes = json.load(file)
 
-    python_classes = pb.endpoint_classes
+    python_classes = mock_pb.endpoint_classes
 
     assert len(ruby_classes) == len(python_classes)
 
@@ -37,7 +37,7 @@ def test_endpoint_classes(pb):
 # This doesn't work well, as too many automatic methods get mixed
 # in in both languages.
 # FIXME: this will also pick up data attributes on the python side.
-def test_endpoint_object_methods(pb):
+def test_endpoint_object_methods(mock_pb):
     with open(
             u"patchboard/tests/data/endpoint_object_methods.json", u"r") as file:
         ruby_object_methods = json.load(file)
@@ -49,7 +49,7 @@ def test_endpoint_object_methods(pb):
             ruby_object_methods[key][u'class'])
 
     python_object_methods = {}
-    for clsname, cls in pb.endpoint_classes.iteritems():
+    for clsname, cls in mock_pb.endpoint_classes.iteritems():
         # Use dict so we don't see inherited methods
         method_list = [name for name, value in cls.__dict__.iteritems()
                        if name[0] != u'_' and isfunction(value)]
