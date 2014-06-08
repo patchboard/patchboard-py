@@ -52,13 +52,10 @@ def test_endpoint_object_methods(pb):
     for clsname, cls in pb.endpoint_classes.iteritems():
         # Use dict so we don't see inherited methods
         method_list = [name for name, value in cls.__dict__.iteritems()
-                       if isfunction(value)]
-        #classmethod_list = [name for name, value in cls.__dict__.iteritems()
-        #                    if isinstance(value, classmethod)]
-        classmethod_list = [name for name, value in cls.__dict__.iteritems()
-                            if not isfunction(value)]
-        #method_list = [method for method in method_list
-        #               if method[0] != '_']
+                       if name[0] != u'_' and isfunction(value)]
+        classmethod_list = [
+            name for name, value in cls.__dict__.iteritems()
+            if name[0] != u'_' and type(value) == classmethod]
         python_object_methods[clsname] = {}
         python_object_methods[clsname][u'class'] = sorted(classmethod_list)
         python_object_methods[clsname][u'instance'] = sorted(method_list)
