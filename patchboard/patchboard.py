@@ -6,13 +6,14 @@
 from __future__ import print_function
 
 
-import json
+import requests
 
 from resource import ResourceType
 from api import API
 from schema_manager import SchemaManager
 from client import Client
 from util import to_camel_case
+from exception import PatchboardError
 
 
 def discover(url):
@@ -20,11 +21,22 @@ def discover(url):
     Retrieve the API definition from the given URL and construct
     a Patchboard to interface with it.
     """
-    # Retrieve JSON data from server
-    # Treat url like a file and read mock JSON for now
-    with open(url, u"r") as file:
-        api_spec = json.load(file)
+    # Retrieve API definition from server
+    try:
+        resp = requests.get(url, headers={u'Accept': u'application/json'})
+    except Exception as e:
+        raise PatchboardError("Problem discovering API: {0}".format(e))
 
+    # Parse as JSON
+    try:
+        # Using the built-in requests json parser--find out if it
+        # is different code than the json package, if so we may have
+        # consistency issues.
+        api_spec = resp.json()
+    except Exception as e:
+        raise PatchboardError("Unparseable API description: {0}".format(e))
+
+    # Return core handle object
     return Patchboard(api_spec)
 
 
