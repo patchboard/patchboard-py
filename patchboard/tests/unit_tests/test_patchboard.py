@@ -6,6 +6,7 @@ from __future__ import print_function
 
 import json
 import pytest
+from inspect import isfunction
 
 from patchboard.tests.fixtures import pb
 pytest.mark.usefixtures(pb)
@@ -42,14 +43,24 @@ def test_endpoint_object_methods(pb):
         ruby_object_methods = json.load(file)
 
     for key in ruby_object_methods.keys():
-        ruby_object_methods[key] = sorted(ruby_object_methods[key])
+        ruby_object_methods[key][u'instance'] = sorted(
+            ruby_object_methods[key][u'instance'])
+        ruby_object_methods[key][u'class'] = sorted(
+            ruby_object_methods[key][u'class'])
 
     python_object_methods = {}
     for clsname, cls in pb.endpoint_classes.iteritems():
         # Use dict so we don't see inherited methods
-        method_list = cls.__dict__.keys()
-        method_list = [method for method in method_list
-                       if method[0] != '_']
-        python_object_methods[clsname] = sorted(method_list)
+        method_list = [name for name, value in cls.__dict__.iteritems()
+                       if isfunction(value)]
+        #classmethod_list = [name for name, value in cls.__dict__.iteritems()
+        #                    if isinstance(value, classmethod)]
+        classmethod_list = [name for name, value in cls.__dict__.iteritems()
+                            if not isfunction(value)]
+        #method_list = [method for method in method_list
+        #               if method[0] != '_']
+        python_object_methods[clsname] = {}
+        python_object_methods[clsname][u'class'] = sorted(classmethod_list)
+        python_object_methods[clsname][u'instance'] = sorted(method_list)
 
     assert ruby_object_methods == python_object_methods
