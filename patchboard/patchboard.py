@@ -49,21 +49,16 @@ class Patchboard(object):
             if resource_name not in classes:
                 schema = self.schema_manager.find_name(resource_name)
                 resource_def = mapping.resource
-                cls = self.create_class(
-                    resource_name,
+                class_name = to_camel_case(str(resource_name))
+                cls = ResourceType(
+                    class_name,
+                    self,
                     resource_def,
                     schema,
                     mapping)
                 classes[resource_name] = cls
 
         return classes
-
-    def create_class(self, resource_name, definition, schema, mapping):
-        # Cannot use unicode for class names
-        class_name = to_camel_case(str(resource_name))
-
-        cls = ResourceType(class_name, self, definition, schema, mapping)
-        return cls
 
     def spawn(self, context={}):
         return Client(context, self.api, self.endpoint_classes)
