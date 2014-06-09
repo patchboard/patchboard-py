@@ -94,16 +94,6 @@
     },
     "application": {
       "actions": {
-        "get": {
-          "method": "GET",
-          "request": {
-            "authorization": "Basic"
-          },
-          "response": {
-            "type": "application/vnd.bitvault.application+json;version=1.0",
-            "status": 200
-          }
-        },
         "update": {
           "method": "PATCH",
           "request": {
@@ -119,6 +109,16 @@
           "method": "POST",
           "request": {
             "authorization": "Basic"
+          },
+          "response": {
+            "type": "application/vnd.bitvault.application+json;version=1.0",
+            "status": 200
+          }
+        },
+        "get": {
+          "method": "GET",
+          "request": {
+            "authorization": "BitVault-Token"
           },
           "response": {
             "type": "application/vnd.bitvault.application+json;version=1.0",
