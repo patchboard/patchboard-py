@@ -23,16 +23,26 @@ def net_pb():
     return discover(u"http://bitvault.pandastrike.com/")
 
 
-## For tests that should run with both
-#@pytest.fixture(scope=u'class', params=[mock_pb(), net_pb()])
-#def pb(request):
-#    return request.param
-
-
 # For tests that should run with both
 @pytest.fixture(scope=u'class', params=range(0, 2))
 def pb(request, mock_pb, net_pb):
     return [mock_pb, net_pb][request.param]
+
+
+@pytest.fixture(scope=u'class')
+def mock_client(mock_pb):
+    return mock_pb.spawn()
+
+
+@pytest.fixture(scope=u'class')
+def net_client(net_pb):
+    return net_pb.spawn()
+
+
+# For tests that should run with both
+@pytest.fixture(scope=u'class', params=range(0, 2))
+def client(request, mock_client, net_client):
+    return [mock_client, net_client][request.param]
 
 
 @pytest.fixture(scope=u'class')
