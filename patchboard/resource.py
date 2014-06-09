@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import json
 
+from action import Action
 from exception import PatchboardError
 
 
@@ -33,13 +34,13 @@ class ResourceType(type):
 
             if schema.get(u'additionalProperties', False) is not False:
                 # FIXME: doesn't take the block the ruby code does
-                def fn(self, name, *args):
+                def additional_fn(self, name, *args):
                     if len(args) == 0:
                         return self.attributes[name]
                     else:
                         return super(cls, self).method_missing(name, *args)
 
-                setattr(cls, 'method_missing', fn)
+                setattr(cls, 'method_missing', additional_fn)
 
         setattr(
             cls,
@@ -48,10 +49,12 @@ class ResourceType(type):
                 lambda(self_, params): mapping.generate_url(params)))
 
         for name, action in definition[u'actions'].iteritems():
-            # FIXME: create actions
+            action = Action(patchboard, name, action)
 
-            # FIXME: implement correctly
-            setattr(cls, name, lambda(self): False)
+            def action_fn(self, *args):
+                return action.request(self, self.url, args)
+
+            setattr(cls, name, action_fn)
 
         # Must be called last
         super(ResourceType, cls).__init__(name, (Resource,), {})

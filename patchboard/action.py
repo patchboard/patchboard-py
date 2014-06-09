@@ -10,7 +10,6 @@ from pprint import pprint
 
 #from urllib import quote_plus
 
-from patchboard import Patchboard
 from exception import PatchboardError
 
 
@@ -53,7 +52,7 @@ class Action(object):
 
         options = self.prepare_request(resource, url, *args)
         # FIXME: need to finish implementing
-        raw = Patchboard.session.request(
+        raw = self.patchboard.session.request(
             self.method,
             url,
             args

@@ -63,6 +63,9 @@ class Patchboard(object):
         #self.resources = client.resources
         self.context = client.context
 
+        # For now, instances share a session--probably should change
+        self.session = Patchboard.session
+
     def create_endpoint_classes(self):
         classes = {}
         for resource_name, mapping in self.api.mappings.iteritems():

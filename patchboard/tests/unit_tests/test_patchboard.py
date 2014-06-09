@@ -8,6 +8,7 @@ import pytest
 
 from patchboard import Patchboard
 from patchboard.client import Client
+from patchboard.endpoints import Endpoints
 
 from patchboard.tests.fixtures import (mock_pb, net_pb, pb,
                                        mock_client, net_client, client)
@@ -21,3 +22,7 @@ def test_discover(pb):
 
 def test_spawn(client):
     assert isinstance(client, Client)
+
+
+def test_client(client):
+    assert isinstance(client.resources, Endpoints)
