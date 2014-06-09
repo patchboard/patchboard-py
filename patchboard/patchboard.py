@@ -23,7 +23,7 @@ def discover(url):
     """
     # Retrieve API definition from server
     try:
-        resp = requests.get(url, headers={u'Accept': u'application/json'})
+        resp = Patchboard.session.get(url)
     except Exception as e:
         raise PatchboardError("Problem discovering API: {0}".format(e))
 
@@ -45,7 +45,15 @@ class Patchboard(object):
     The primary client interface to a patchboard server.
     """
 
+    # Use a session object to collect up defaults. This is class
+    # data, so it shouldn't be modified by instance methods.
+    session = requests.Session()
+    session.headers.update({
+        u'Accept': u'application/json',
+        u'User-Agent': u'patchboard-py v0.1.0', })
+
     def __init__(self, api_spec):
+
         self.api = API(api_spec)
 
         self.schema_manager = SchemaManager(self.api.schemas)
