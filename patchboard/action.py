@@ -6,9 +6,11 @@
 from __future__ import print_function
 
 import json
+from pprint import pprint
 
 #from urllib import quote_plus
 
+from patchboard import Patchboard
 from exception import PatchboardError
 
 
@@ -47,12 +49,17 @@ class Action(object):
 
         self.success_status = response.get(u'status', 200)
 
-        self.http = patchboard.http
-
     def request(self, resource, url, *args):
 
         options = self.prepare_request(resource, url, *args)
         # FIXME: need to finish implementing
+        raw = Patchboard.session.request(
+            self.method,
+            url,
+            args
+        )
+        print("Raw response:")
+        pprint(raw)
 
         return options
 
