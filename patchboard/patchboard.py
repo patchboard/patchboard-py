@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import requests
 from types import ModuleType
+import collections
 
 from resource import ResourceType
 from api import API
@@ -41,19 +42,23 @@ def discover(url, options={}):
 
 
 class Patchboard(object):
+    # Provide a slightly more convenient interface than patchboard-rb:
     """
     The primary client interface to a patchboard server.
 
     Supported options:
 
-        context_creator: callable that returns a default context
-                         used when none is specified explicitly.
+        default_context:    The context used when none is specified
+                            explicitly. It may either be a mapping
+                            type (usually a simple dict) or a callable
+                            that returns a mapping type.  The "default
+                            for the default" is {}.
 
-        namespace:       namespace in which to inject the resource
-                         classes.
+        resource_namespace: namespace in which to inject the resource
+                            classes.
 
-        headers:         dict of headers; combined with and overrides
-                         the session defaults.
+        default_headers:    dict of HTTP headers; combined with and
+                            overrides the session defaults.
     """
 
     default_headers = {
@@ -62,24 +67,27 @@ class Patchboard(object):
 
     def __init__(self, api_spec, options={}):
 
-        self.headers = options.get(u'headers', None)
-        self.namespace = options.get(u'namespace', None)
-        self.context_creator = options.get(u'context_creator', None)
+        self.default_headers = options.get(u'default_headers', None)
+        self.resource_namespace = options.get(u'resource_namespace', None)
+        self.default_context = options.get(u'default_context', {})
 
         # Each Patchboard object is a separate session
         self.session = requests.Session()
         self.session.headers.update(Patchboard.default_headers)
-        if self.headers:
-            self.session.headers.update(self.headers)
+        if self.default_headers:
+            self.session.headers.update(self.default_headers)
 
         # Verify namespace
-        if self.namespace and not isinstance(self.namespace, ModuleType):
-            raise PatchboardError(u"Namespace must be a Module")
+        if (self.resource_namespace and
+                not isinstance(self.resource_namespace, ModuleType)):
+            raise PatchboardError(u"resource_namespace must be a Module")
 
         self.api = API(api_spec)
 
         self.schema_manager = SchemaManager(self.api.schemas)
         self.endpoint_classes = self.create_endpoint_classes()
+        # FIXME: this logic seems suspect. Why should we be saving
+        # a context and resources created without the specified context?
         client = self.spawn({})
         self.context = client.context
         # Appears to be unused
@@ -103,12 +111,16 @@ class Patchboard(object):
         return classes
 
     def spawn(self, context=None):
-        # Subtle point: must test for None explicitly because {} is
-        # a valid context but is falsy in Python
+        """
+        context may be a callable or a dict.
+        """
         if context is None:
-            if self.context_creator:
-                context = self.context_creator()
-            else:
-                raise PatchboardError(u'no context or context_creator')
+            context = self.default_context
+
+        if isinstance(context, collections.Callable):
+            context = context()
+
+        if not isinstance(context, collections.Mapping):
+            raise PatchboardError(u'Cannot determine a valid context')
 
         return Client(context, self.api, self.endpoint_classes)

@@ -31,12 +31,12 @@ def pb(request, mock_pb, net_pb):
 
 @pytest.fixture(scope=u'class')
 def mock_client(mock_pb):
-    return mock_pb.spawn({})
+    return mock_pb.spawn()
 
 
 @pytest.fixture(scope=u'class')
 def net_client(net_pb):
-    return net_pb.spawn({})
+    return net_pb.spawn()
 
 
 # For tests that should run with both
