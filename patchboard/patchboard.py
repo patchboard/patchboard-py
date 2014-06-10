@@ -5,8 +5,8 @@
 
 from __future__ import print_function
 
-
 import requests
+from types import ModuleType
 
 from resource import ResourceType
 from api import API
@@ -16,14 +16,14 @@ from util import to_camel_case
 from exception import PatchboardError
 
 
-def discover(url):
+def discover(url, options={}):
     """
     Retrieve the API definition from the given URL and construct
     a Patchboard to interface with it.
     """
     # Retrieve API definition from server
     try:
-        resp = Patchboard.session.get(url)
+        resp = requests.get(url, headers=Patchboard.default_headers)
     except Exception as e:
         raise PatchboardError("Problem discovering API: {0}".format(e))
 
@@ -37,34 +37,53 @@ def discover(url):
         raise PatchboardError("Unparseable API description: {0}".format(e))
 
     # Return core handle object
-    return Patchboard(api_spec)
+    return Patchboard(api_spec, options)
 
 
 class Patchboard(object):
     """
     The primary client interface to a patchboard server.
+
+    Supported options:
+
+        context_creator: callable that returns a default context
+                         used when none is specified explicitly.
+
+        namespace:       namespace in which to inject the resource
+                         classes.
+
+        headers:         dict of headers; combined with and overrides
+                         the session defaults.
     """
 
-    # Use a session object to collect up defaults. This is class
-    # data, so it shouldn't be modified by instance methods.
-    session = requests.Session()
-    session.headers.update({
+    default_headers = {
         u'Accept': u'application/json',
-        u'User-Agent': u'patchboard-py v0.1.0', })
+        u'User-Agent': u'patchboard-py v0.1.0', }
 
-    def __init__(self, api_spec):
+    def __init__(self, api_spec, options={}):
+
+        self.headers = options.get(u'headers', None)
+        self.namespace = options.get(u'namespace', None)
+        self.context_creator = options.get(u'context_creator', None)
+
+        # Each Patchboard object is a separate session
+        self.session = requests.Session()
+        self.session.headers.update(Patchboard.default_headers)
+        if self.headers:
+            self.session.headers.update(self.headers)
+
+        # Verify namespace
+        if self.namespace and not isinstance(self.namespace, ModuleType):
+            raise PatchboardError(u"Namespace must be a Module")
 
         self.api = API(api_spec)
 
         self.schema_manager = SchemaManager(self.api.schemas)
         self.endpoint_classes = self.create_endpoint_classes()
-        client = self.spawn()
-        # Appears to be unused
-        #self.resources = client.resources
+        client = self.spawn({})
         self.context = client.context
-
-        # For now, instances share a session--probably should change
-        self.session = Patchboard.session
+        # Appears to be unused
+        self.resources = client.resources
 
     def create_endpoint_classes(self):
         classes = {}
@@ -83,5 +102,13 @@ class Patchboard(object):
 
         return classes
 
-    def spawn(self, context={}):
+    def spawn(self, context=None):
+        # Subtle point: must test for None explicitly because {} is
+        # a valid context but is falsy in Python
+        if context is None:
+            if self.context_creator:
+                context = self.context_creator()
+            else:
+                raise PatchboardError(u'no context or context_creator')
+
         return Client(context, self.api, self.endpoint_classes)
