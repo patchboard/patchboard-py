@@ -40,6 +40,9 @@ class ResourceType(type):
                     else:
                         return super(cls, self).method_missing(name, *args)
 
+                # FIXME: this needs to be implemented via
+                # __getattr__(self, name). Possibly implemented in
+                # the base class as a dict lookup with the dict
                 setattr(cls, 'method_missing', additional_fn)
 
         setattr(
