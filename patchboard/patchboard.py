@@ -90,7 +90,7 @@ class Patchboard(object):
         # a context and resources created without the specified context?
         client = self.spawn({})
         self.context = client.context
-        # Appears to be unused
+        # Appears to be unused?
         self.resources = client.resources
 
     def create_endpoint_classes(self):

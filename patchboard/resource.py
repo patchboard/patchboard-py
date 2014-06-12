@@ -71,9 +71,14 @@ class Resource(object):
         # TODO: non destructive decoration
         # TODO: add some sort of validation for the input attributes.
 
-        if cls.schema and u'properties' in cls.schema:
+        try:
+            class_schema = cls.schema
+        except AttributeError:
+            class_schema = None
+
+        if class_schema and u'properties' in class_schema:
             context = instance.context
-            properties = cls.schema[u'properties']
+            properties = class_schema[u'properties']
             for key, sub_schema in properties.iteritems():
 
                 if key not in attributes:
