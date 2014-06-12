@@ -11,9 +11,17 @@ import pytest
 from patchboard.tests.fixtures import (mock_pb, net_pb,
                                        mock_schema_manager,
                                        net_schema_manager,
-                                       schema_manager)
+                                       schema_manager,
+                                       trivial_spec,
+                                       trivial_api,
+                                       trivial_schema_manager)
 pytest.mark.usefixtures(mock_pb, net_pb, mock_schema_manager,
-                        net_schema_manager, schema_manager)
+                        net_schema_manager, schema_manager,
+                        trivial_spec, trivial_api, trivial_schema_manager)
+
+
+def media_type(name):
+    return "application/vnd.gh-knockoff.{0}+json".format(name)
 
 
 def test_id_index(schema_manager):
@@ -62,3 +70,20 @@ def test_find(schema_manager):
 
     by_name = schema_manager.find_name(by_media_type[u'id'].split(u'#')[1])
     assert by_name == by_media_type
+
+
+def test_trivial_find(trivial_schema_manager):
+    sm = trivial_schema_manager
+
+    schema_id = u"urn:gh-knockoff#user"
+    user_media_type = media_type(u'user')
+    user_schema = sm.find_media_type(user_media_type)
+
+    assert user_schema
+    assert user_schema[u'mediaType'] == user_media_type
+    assert user_schema[u'id'] == schema_id
+    assert user_schema.get(u'properties', None)
+
+    ref_schema = sm.find_id(schema_id)
+    assert ref_schema
+    assert ref_schema == user_schema
