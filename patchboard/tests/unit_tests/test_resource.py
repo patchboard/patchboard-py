@@ -36,6 +36,7 @@ def test_endpoint_classes(pb):
 
 # This doesn't work well, as too many automatic methods get mixed
 # in in both languages.
+@pytest.mark.xfail
 def test_endpoint_object_methods(pb):
     with open(
             u"patchboard/tests/data/endpoint_object_methods.json", u"r") as file:
