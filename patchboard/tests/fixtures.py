@@ -6,10 +6,21 @@ from __future__ import print_function
 
 import json
 import pytest
+import imp
 
+import patchboard.resource
 from patchboard import discover, Patchboard
 from patchboard.api import API
 from patchboard.schema_manager import SchemaManager
+
+
+# A namespace to put symbols in
+class PatchboardTestClass:
+    pass
+
+
+# Another one
+PatchboardTestModule = imp.new_module(u'PatchboardTestModule')
 
 
 ######################################################################
@@ -110,9 +121,40 @@ def trivial_schema_manager(trivial_api):
     return SchemaManager(trivial_api.schemas)
 
 
+# We'll use the trivial api to test the namespace injection feature:
+# test in the default, a dummy class, and a dummy module. Some code needs
+# a textual name and some the namespace object, so this fixture returns
+# both in pairs so they stay in sync.
+@pytest.fixture(scope=u'class', params=range(0, 3))
+def trivial_namespace(request):
+    return [
+        # Hardcode the default resource namespace
+        {u'name': 'patchboard.resource', u'namespace': patchboard.resource},
+        # Compute the rest of the namespaces automagically--the commented
+        # line is what it currently expands to
+        #{u'name': 'patchboard.tests.fixtures.PatchboardTestClass', u'namespace': PatchboardTestClass},
+        {
+            u'name': globals()['__name__'] + '.' + 'PatchboardTestClass',
+            u'namespace': PatchboardTestClass
+        },
+        {
+            u'name': globals()['__name__'] + '.' + 'PatchboardTestModule',
+            u'namespace': PatchboardTestModule
+        },
+    ][request.param]
+
+
 @pytest.fixture(scope=u'class')
-def trivial_pb(trivial_spec):
-    return Patchboard(trivial_spec)
+def trivial_pb(trivial_spec, trivial_namespace):
+    name = trivial_namespace[u'name']
+    resource = trivial_namespace[u'namespace']
+    # Not fully working yet
+    #return Patchboard(trivial_spec, {u'resource_namespace': PatchboardTests})
+    if name == u'patchboard.resource':
+        # Test default
+        return Patchboard(trivial_spec)
+    else:
+        return Patchboard(trivial_spec, {u'resource_namespace': resource})
 
 
 @pytest.fixture(scope=u'class')
