@@ -96,17 +96,17 @@ class Patchboard(object):
     def create_endpoint_classes(self):
         classes = {}
         for resource_name, mapping in self.api.mappings.iteritems():
-            if resource_name not in classes:
-                schema = self.schema_manager.find_name(resource_name)
-                resource_def = mapping.resource
-                class_name = to_camel_case(str(resource_name))
-                cls = ResourceType(
-                    class_name,
-                    self,
-                    resource_def,
-                    schema,
-                    mapping)
-                classes[resource_name] = cls
+            schema = self.schema_manager.find_name(resource_name)
+            resource_def = mapping.resource
+            class_name = to_camel_case(str(resource_name))
+            cls = ResourceType(
+                class_name,
+                self,
+                resource_def,
+                schema,
+                mapping)
+            mapping.cls = cls
+            classes[resource_name] = cls
 
         return classes
 
