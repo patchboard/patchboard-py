@@ -12,16 +12,13 @@ from patchboard.tests.fixtures import (mock_pb, net_pb,
                                        mock_schema_manager,
                                        net_schema_manager,
                                        schema_manager,
+                                       trivial_media_type,
                                        trivial_spec,
                                        trivial_api,
                                        trivial_schema_manager)
 pytest.mark.usefixtures(mock_pb, net_pb, mock_schema_manager,
                         net_schema_manager, schema_manager,
                         trivial_spec, trivial_api, trivial_schema_manager)
-
-
-def media_type(name):
-    return "application/vnd.gh-knockoff.{0}+json".format(name)
 
 
 def test_id_index(schema_manager):
@@ -72,11 +69,12 @@ def test_find(schema_manager):
     assert by_name == by_media_type
 
 
+# Reproduce patchboard-rb schema_manager unit tests
 def test_trivial_find(trivial_schema_manager):
     sm = trivial_schema_manager
 
     schema_id = u"urn:gh-knockoff#user"
-    user_media_type = media_type(u'user')
+    user_media_type = trivial_media_type(u'user')
     user_schema = sm.find_media_type(user_media_type)
 
     assert user_schema

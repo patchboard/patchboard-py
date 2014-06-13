@@ -12,10 +12,6 @@ from patchboard.api import API
 from patchboard.schema_manager import SchemaManager
 
 
-def media_type(name):
-    return "application/vnd.gh-knockoff.{0}+json".format(name)
-
-
 ######################################################################
 # Fixtures for testing with the bitvault api
 ######################################################################
@@ -90,9 +86,13 @@ def schema_manager(request, mock_schema_manager, net_schema_manager):
 ######################################################################
 
 
+def trivial_media_type(name):
+    return "application/vnd.gh-knockoff.{0}+json".format(name)
+
+
 @pytest.fixture(scope=u'class')
 def trivial_spec():
-    with open(u"patchboard/tests/data/trivial_api.json", u'r') as file:
+    with open(u"patchboard/tests/data/example_api.json", u'r') as file:
         api_spec = json.load(file)
 
     api_spec[u'schemas'] = [api_spec.pop(u'schema')]
@@ -110,6 +110,23 @@ def trivial_schema_manager(trivial_api):
     return SchemaManager(trivial_api.schemas)
 
 
-#@pytest.fixture(scope=u'class')
-#def trivial_pb(trivial_spec):
-#    return Patchboard(trivial_spec)
+@pytest.fixture(scope=u'class')
+def trivial_pb(trivial_spec):
+    return Patchboard(trivial_spec)
+
+
+@pytest.fixture(scope=u'class')
+def trivial_mapping(trivial_pb):
+    return trivial_pb.api.mappings[u'repository']
+
+
+@pytest.fixture(scope=u'class')
+def trivial_data():
+    with open(u"patchboard/tests/data/dectest.json", u'r') as file:
+        data = json.load(file)
+    return data
+
+
+@pytest.fixture(scope=u'class')
+def trivial_repo(trivial_mapping, trivial_data):
+    return trivial_mapping.cls({}, trivial_data)
