@@ -34,6 +34,7 @@ class Endpoints(object):
                 # the endpoint method takes parameters and instantiates a
                 # resource of the correct class.
                 # FIXME: this implementation may not be correct
+
                 def fn(self, params={}):
                     if isinstance(params, str):
                         url = params
@@ -41,18 +42,17 @@ class Endpoints(object):
                         url = mapping.generate_url(params)
                     return cls(context, {u'url': url})
 
-                endpoint = MethodType(fn, self, type(self))
-
             elif mapping.path:
                 # When a mapping has the 'path' property, all that is needed to
                 # create a usable resource is the full URL.  Thus this endpoint
                 # method returns an instantiated resource directly.
-                endpoint = cls(context, {u'url': mapping.generate_url()})
+                fn = lambda(self): cls(context, {u'url': mapping.generate_url()})
 
             elif mapping.url:
-                endpoint = cls(context, {u'url': mapping.url})
+                fn = lambda(self): cls(context, {u'url': mapping.url})
 
             else:
                 raise PatchboardError(u"Mapping '{0}' is invalid".format(name))
 
+            endpoint = MethodType(fn, self, type(self))
             setattr(self, name, endpoint)
