@@ -6,9 +6,10 @@
 from __future__ import print_function
 
 import requests
-from types import ModuleType
 import collections
+#import imp
 
+import resource
 from resource import ResourceType
 from api import API
 from schema_manager import SchemaManager
@@ -68,7 +69,11 @@ class Patchboard(object):
     def __init__(self, api_spec, options={}):
 
         self.default_headers = options.get(u'default_headers', None)
-        self.resource_namespace = options.get(u'resource_namespace', None)
+        # Note--resource_namespace doesn't have to be a module--it can
+        # be a class or anything else that supports setattr
+        self.resource_namespace = options.get(
+            u'resource_namespace',
+            resource)
         self.default_context = options.get(u'default_context', {})
 
         # Each Patchboard object is a separate session
@@ -76,11 +81,6 @@ class Patchboard(object):
         self.session.headers.update(Patchboard.default_headers)
         if self.default_headers:
             self.session.headers.update(self.default_headers)
-
-        # Verify namespace
-        if (self.resource_namespace and
-                not isinstance(self.resource_namespace, ModuleType)):
-            raise PatchboardError(u"resource_namespace must be a Module")
 
         self.api = API(api_spec)
 
@@ -107,6 +107,7 @@ class Patchboard(object):
                 mapping)
             mapping.cls = cls
             classes[resource_name] = cls
+            setattr(self.resource_namespace, class_name, cls)
 
         return classes
 
