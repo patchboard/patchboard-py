@@ -7,11 +7,13 @@ from __future__ import print_function
 import json
 import pytest
 import imp
+from collections import namedtuple
 
 import patchboard.resource
 from patchboard import discover, Patchboard
 from patchboard.api import API
 from patchboard.schema_manager import SchemaManager
+from patchboard.action import Action
 
 
 # A namespace to put symbols in
@@ -172,3 +174,31 @@ def trivial_data():
 @pytest.fixture(scope=u'class')
 def trivial_repo(trivial_mapping, trivial_data):
     return trivial_mapping.cls({}, trivial_data)
+
+
+# Mocks for test_action
+@pytest.fixture(scope=u'class')
+def MockPB():
+    return namedtuple(u'MockPB', [u'schema_manager', u'http', u'api'])
+
+
+@pytest.fixture(scope=u'class')
+def mock_trivial_pb(MockPB, trivial_schema_manager, trivial_api):
+    return MockPB(trivial_schema_manager, None, trivial_api)
+
+
+@pytest.fixture(scope=u'class')
+def mock_trivial_action(mock_trivial_pb):
+    return Action(
+        mock_trivial_pb,
+        u'create',
+        {
+            u'method': u"POST",
+            u'request': {
+                u'type': trivial_media_type(u"user"),
+            },
+            u'response': {
+                u'type': trivial_media_type("user"),
+                u'status': 201
+            }
+        })
