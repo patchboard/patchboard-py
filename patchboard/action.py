@@ -106,7 +106,13 @@ class Action(object):
         print(args)
         print(signature)
 
-        if self.request_schema:
+        request_schema = None
+        try:
+            request_schema = self.request_schema
+        except AttributeError:
+            pass
+
+        if request_schema:
             if signature == u"str" or signature == u'unicode':
                 options[u'body'] = args[0]
             elif signature == u"dict" or signature == u"list":
@@ -116,7 +122,9 @@ class Action(object):
                     u"Invalid arguments for action: request content is required"
                 )
         else:
-            if signature != u"":
+            if signature == u"":
+                options[u'body'] = None
+            else:
                 raise PatchboardError(u"Invalid arguments for action")
 
         return options

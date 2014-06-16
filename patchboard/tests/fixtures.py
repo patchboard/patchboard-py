@@ -188,7 +188,7 @@ def mock_trivial_pb(MockPB, trivial_schema_manager, trivial_api):
 
 
 @pytest.fixture(scope=u'class')
-def mock_trivial_action(mock_trivial_pb):
+def mock_create_action(mock_trivial_pb):
     return Action(
         mock_trivial_pb,
         u'create',
@@ -200,5 +200,24 @@ def mock_trivial_action(mock_trivial_pb):
             u'response': {
                 u'type': trivial_media_type("user"),
                 u'status': 201
+            }
+        })
+
+
+@pytest.fixture(scope=u'class')
+def MockResource():
+    return namedtuple(u'MockResource', [u'context'])
+
+
+@pytest.fixture(scope=u'class')
+def mock_empty_get_action(mock_trivial_pb):
+    return Action(
+        mock_trivial_pb,
+        u'get',
+        {
+            u'method': u"GET",
+            u'response': {
+                u'type': trivial_media_type("user"),
+                u'status': 200
             }
         })
