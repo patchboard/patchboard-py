@@ -102,13 +102,15 @@ class Action(object):
     def process_args(self, args):
 
         options = {}
-        signature = [type(arg) for arg in args].join(u'.')
+        signature = u'.'.join([type(arg).__name__ for arg in args])
+        print(args)
+        print(signature)
 
         if self.request_schema:
-            if signature == u"String":
+            if signature == u"str" or signature == u'unicode':
                 options[u'body'] = args[0]
-            elif signature == u"Hash" or signature == u"Array":
-                options[u'body'] = json.generate(args[0])
+            elif signature == u"dict" or signature == u"list":
+                options[u'body'] = json.dumps(args[0])
             else:
                 raise PatchboardError(
                     u"Invalid arguments for action: request content is required"

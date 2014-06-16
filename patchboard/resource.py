@@ -136,4 +136,4 @@ class Resource(object):
         return self.attributes
 
     def to_json(self):
-        return json.generate(self.attributes)
+        return json.dumps(self.attributes)
