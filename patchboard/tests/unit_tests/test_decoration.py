@@ -46,7 +46,8 @@ def test_action_methods(trivial_repo):
 def test_attributes(trivial_repo):
     for key in [u'name', u'owner', u'refs']:
         assert trivial_repo.attributes[key]
-        assert trivial_repo.send(key)
+        assert hasattr(trivial_repo, key)
+        assert callable(getattr(trivial_repo, key))
 
 
 def test_attr_methods(trivial_repo):

@@ -33,17 +33,18 @@ class ResourceType(type):
                         lambda(self): self.attributes[name])
 
             if schema.get(u'additionalProperties', False) is not False:
-                # FIXME: doesn't take the block the ruby code does
                 def additional_fn(self, name, *args):
-                    if len(args) == 0:
+                    # TODO: see if this is the right implementation; the
+                    # ruby code intercepts calls *before* normal lookup,
+                    # so possibly this should use __getattribute__. OTOH
+                    # that may just be an artifact of Ruby and not part
+                    # of the design.
+                    try:
                         return self.attributes[name]
-                    else:
-                        return super(cls, self).method_missing(name, *args)
+                    except KeyError:
+                        raise AttributeError
 
-                # FIXME: this needs to be implemented via
-                # __getattr__(self, name). Possibly implemented in
-                # the base class as a dict lookup with the dict
-                setattr(cls, 'method_missing', additional_fn)
+                setattr(cls, '__getattr__', additional_fn)
 
         setattr(
             cls,
