@@ -7,15 +7,18 @@ from __future__ import print_function
 
 import requests
 import collections
-#import imp
+import imp
 
-import resource
 from resource import ResourceType
 from api import API
 from schema_manager import SchemaManager
 from client import Client
 from util import to_camel_case
 from exception import PatchboardError
+
+
+# Default module to hold resource classes
+resources = imp.new_module(u'resources')
 
 
 def discover(url, options={}):
@@ -73,7 +76,7 @@ class Patchboard(object):
         # be a class or anything else that supports setattr
         self.resource_namespace = options.get(
             u'resource_namespace',
-            resource)
+            resources)
         self.default_context = options.get(u'default_context', {})
 
         # Each Patchboard object is a separate session

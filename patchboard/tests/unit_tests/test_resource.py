@@ -43,10 +43,16 @@ def test_endpoint_object_methods(pb):
         ruby_object_methods = json.load(file)
 
     for key in ruby_object_methods.keys():
-        ruby_object_methods[key][u'instance'] = sorted(
-            ruby_object_methods[key][u'instance'])
-        ruby_object_methods[key][u'class'] = sorted(
-            ruby_object_methods[key][u'class'])
+        # Filter methods that don't correspond
+        ignore = set((u'method_missing',))
+        for method_type in (u'instance', u'class'):
+
+            ruby_object_methods[key][method_type] = [
+                m for m in ruby_object_methods[key][method_type]
+                if m not in ignore]
+
+            ruby_object_methods[key][method_type] = sorted(
+                ruby_object_methods[key][method_type])
 
     python_object_methods = {}
     for clsname, cls in pb.endpoint_classes.iteritems():

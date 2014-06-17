@@ -131,7 +131,7 @@ def trivial_schema_manager(trivial_api):
 def trivial_namespace(request):
     return [
         # Hardcode the default resource namespace
-        {u'name': 'patchboard.resource', u'namespace': patchboard.resource},
+        {u'name': 'patchboard.resources', u'namespace': patchboard.resources},
         # Compute the rest of the namespaces automagically--the commented
         # line is what it currently expands to
         #{u'name': 'patchboard.tests.fixtures.PatchboardTestClass', u'namespace': PatchboardTestClass},

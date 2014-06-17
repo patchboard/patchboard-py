@@ -4,5 +4,5 @@
 
 
 # Import the names we want available at top-level
-from patchboard import discover, Patchboard
+from patchboard import discover, Patchboard, resources
 from client import Client

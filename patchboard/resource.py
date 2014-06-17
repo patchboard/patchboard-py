@@ -22,7 +22,9 @@ class ResourceType(type):
 
         setattr(cls, 'api', classmethod(lambda(self_): patchboard.api))
 
-        setattr(cls, 'schema', classmethod(lambda(self_): mapping))
+        setattr(cls, 'schema', classmethod(lambda(self_): schema))
+
+        setattr(cls, 'mapping', classmethod(lambda(self_): mapping))
 
         if schema:
             if u'properties' in schema:
