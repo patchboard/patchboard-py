@@ -57,10 +57,12 @@ class ResourceType(type):
         for name, action in definition[u'actions'].iteritems():
             action = Action(patchboard, name, action)
 
-            def action_fn(self, *args):
-                return action.request(self, self.url, *args)
+            def bind(action):
+                def action_fn(self, *args):
+                    return action.request(self, self.url, *args)
+                return action_fn
 
-            setattr(cls, name, action_fn)
+            setattr(cls, name, bind(action))
 
         # Must be called last
         super(ResourceType, cls).__init__(name, (Resource,), {})
