@@ -6,11 +6,9 @@
 from __future__ import print_function
 
 import json
-from pprint import pprint
-
-#from urllib import quote_plus
 
 from exception import PatchboardError
+from response import Response
 
 
 class Action(object):
@@ -28,6 +26,8 @@ class Action(object):
         request = definition.get(u'request', None)
         response = definition.get(u'response', None)
 
+        self.request_schema = self.response_schema = None
+
         if request:
             self.auth_scheme = request.get(u'authorization', None)
 
@@ -36,8 +36,6 @@ class Action(object):
                 self.headers[u'Content-Type'] = content_type
                 self.request_schema = \
                     self.schema_manager.find_media_type(content_type)
-            else:
-                self.request_schema = None
 
         if response and u'type' in response:
 
@@ -57,10 +55,17 @@ class Action(object):
             url,
             args
         )
-        print("Raw response:")
-        pprint(raw)
+        response = Response(raw)
+        if response.status != self.success_status:
+            err_msg = ("Unexpected response status: " + response.status +
+                       " - " + response.body)
+            raise PatchboardError(err_msg)
 
-        return options
+        out = self.api.decorate(resource.context,
+                                self.response_schema,
+                                response.data)
+        out.response = response
+        return out
 
     def prepare_request(self, resource, url, *args):
 
