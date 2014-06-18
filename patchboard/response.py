@@ -16,11 +16,16 @@ class Response(object):
     def __init__(self, raw):
         self.raw = raw
 
+        # Different naming convention between Python's Requests and
+        # Ruby's HTTP?
+        #self.status = raw.status_code
+
         self.data = None
         try:
             if Response.content_pattern.search(raw.headers[u'Content-Type']):
                 self.data = json.load(raw.body)
         except KeyError:
+            # If no Content-Type, don't care
             pass
 
     def __getattr__(self, name):
