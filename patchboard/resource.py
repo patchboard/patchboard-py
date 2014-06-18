@@ -20,11 +20,11 @@ class ResourceType(type):
 
     def __init__(cls, name, patchboard, definition, schema, mapping):
 
-        setattr(cls, 'api', classmethod(lambda(self_): patchboard.api))
+        setattr(cls, 'api', patchboard.api)
 
-        setattr(cls, 'schema', classmethod(lambda(self_): schema))
+        setattr(cls, 'schema', schema)
 
-        setattr(cls, 'mapping', classmethod(lambda(self_): mapping))
+        setattr(cls, 'mapping', mapping)
 
         if schema:
             if u'properties' in schema:
@@ -32,7 +32,7 @@ class ResourceType(type):
                     setattr(
                         cls,
                         name,
-                        lambda(self): self.attributes[name])
+                        lambda(self_): self_.attributes[name])
 
             if schema.get(u'additionalProperties', False) is not False:
                 def additional_fn(self, name, *args):
