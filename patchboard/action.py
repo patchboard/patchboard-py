@@ -52,7 +52,7 @@ class Action(object):
         raw = self.patchboard.session.request(
             self.method,
             url,
-            args
+            options
         )
         response = Response(raw)
         if response.status != self.success_status:
