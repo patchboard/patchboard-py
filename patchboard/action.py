@@ -49,7 +49,6 @@ class Action(object):
     def request(self, resource, url, *args):
 
         options = self.prepare_request(resource, url, *args)
-        # FIXME: need to finish implementing
         raw = self.patchboard.session.request(
             self.method,
             url,
