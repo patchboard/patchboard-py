@@ -235,4 +235,4 @@ def trivial_net_resources(trivial_net_pb):
 
 @pytest.fixture(scope=u'class')
 def trivial_net_users(trivial_net_resources):
-    return trivial_net_resources.users()
+    return trivial_net_resources.users
