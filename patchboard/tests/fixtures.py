@@ -221,3 +221,18 @@ def mock_empty_get_action(mock_trivial_pb):
                 u'status': 200
             }
         })
+
+
+@pytest.fixture(scope=u'class')
+def trivial_net_pb():
+    return discover(u"http://localhost:1979/")
+
+
+@pytest.fixture(scope=u'class')
+def trivial_net_resources(trivial_net_pb):
+    return trivial_net_pb.resources
+
+
+@pytest.fixture(scope=u'class')
+def trivial_net_users(trivial_net_resources):
+    return trivial_net_resources.users
