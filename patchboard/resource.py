@@ -58,7 +58,7 @@ class ResourceType(type):
             action = Action(patchboard, name, action)
 
             def action_fn(self, *args):
-                return action.request(self, self.url, args)
+                return action.request(self, self.url, *args)
 
             setattr(cls, name, action_fn)
 
