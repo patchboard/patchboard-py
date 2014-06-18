@@ -107,8 +107,6 @@ class Action(object):
 
         options = {}
         signature = u'.'.join([type(arg).__name__ for arg in args])
-        print(args)
-        print(signature)
 
         request_schema = None
         try:
