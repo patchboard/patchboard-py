@@ -65,7 +65,7 @@ class Mapping(object):
                             quote_plus(string)))
 
             if len(parts) > 0:
-                query_string = "?{0}".format(parts.join(u'&'))
+                query_string = "?{0}".format(u'&'.join(parts))
             else:
                 query_string = ""
 

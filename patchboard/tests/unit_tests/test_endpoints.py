@@ -11,8 +11,7 @@ pytest.mark.usefixtures(mock_pb, net_pb, pb)
 
 def test_expected_properties(pb):
     users = pb.resources.users
-    #pp(users)
-    #pp(pb.resources.login)
-    login = pb.resources.login
-    login({"email": "foo@email.com"})
+    login = pb.resources.login({"email": "foo@email.com"})
+    url = "http://bitvault.pandastrike.com/users?email=foo%40email.com"
+    assert login.url == url
 
