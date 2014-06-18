@@ -108,6 +108,7 @@ def trivial_spec():
     with open(u"patchboard/tests/data/example_api.json", u'r') as file:
         api_spec = json.load(file)
 
+    api_spec[u'service_url'] = "http://patchboard.it"
     api_spec[u'schemas'] = [api_spec.pop(u'schema')]
 
     return api_spec
