@@ -35,24 +35,25 @@ class Endpoints(object):
                 # resource of the correct class.
                 # FIXME: this implementation may not be correct
 
-                def fn(self, params={}):
-                    if isinstance(params, str):
-                        url = params
-                    else:
-                        url = mapping.generate_url(params)
-                    return cls(context, {u'url': url})
+                def bind(name, cls, mapping):
+                    def fn(params={}):
+                        if isinstance(params, str):
+                            url = params
+                        else:
+                            url = mapping.generate_url(params)
+                        return cls(context, {u'url': url})
+                    return fn
+                setattr(self, name, bind(name, cls, mapping))
 
             elif mapping.path:
                 # When a mapping has the 'path' property, all that is needed to
                 # create a usable resource is the full URL.  Thus this endpoint
                 # method returns an instantiated resource directly.
-                fn = lambda(self): cls(context, {u'url': mapping.generate_url()})
+                setattr(self, name, cls(context, {u'url': mapping.generate_url()}))
 
             elif mapping.url:
-                fn = lambda(self): cls(context, {u'url': mapping.url})
+                setattr(self, name, cls(context, {u'url': mapping.url}))
 
             else:
                 raise PatchboardError(u"Mapping '{0}' is invalid".format(name))
 
-            endpoint = MethodType(fn, self, type(self))
-            setattr(self, name, endpoint)
