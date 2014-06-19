@@ -71,7 +71,7 @@ class TestWithRequestBody(object):
         assert options[u'headers']
         assert options[u'headers'][u'Content-Type'] == media_type
         assert options[u'headers'][u'Accept'] == media_type
-        assert options[u'body'] == json.dumps(content)
+        assert options[u'data'] == json.dumps(content)
 
 
 class TestWithoutRequestBody(object):
