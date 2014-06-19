@@ -29,10 +29,12 @@ class ResourceType(type):
         if schema:
             if u'properties' in schema:
                 for name, schema_def in schema[u'properties'].iteritems():
-                    setattr(
-                        cls,
-                        name,
-                        lambda(self_): self_.attributes[name])
+                    def bind_property(name):
+                        def fn(self):
+                            return self.attributes[name]
+                        return fn
+
+                    setattr(cls, name, bind_property(name))
 
             if schema.get(u'additionalProperties', False) is not False:
                 def additional_fn(self, name, *args):
@@ -57,12 +59,12 @@ class ResourceType(type):
         for name, action in definition[u'actions'].iteritems():
             action = Action(patchboard, name, action)
 
-            def bind(action):
+            def bind_action(action):
                 def action_fn(self, *args):
                     return action.request(self, self.url, *args)
                 return action_fn
 
-            setattr(cls, name, bind(action))
+            setattr(cls, name, bind_action(action))
 
         # Must be called last
         super(ResourceType, cls).__init__(name, (Resource,), {})
