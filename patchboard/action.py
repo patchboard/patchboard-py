@@ -49,15 +49,13 @@ class Action(object):
     def request(self, resource, url, *args):
 
         options = self.prepare_request(resource, url, *args)
-        raw = self.patchboard.session.request(
-            self.method,
-            url,
-            options
-        )
+
+        raw = self.patchboard.session.request(**options)
         response = Response(raw)
-        if response.status != self.success_status:
-            err_msg = ("Unexpected response status: " + response.status +
-                       " - " + response.body)
+        if response.status_code != self.success_status:
+            err_msg = ("Unexpected response status: " +
+                       str(response.status_code) +
+                       " - " + response.content)
             raise PatchboardError(err_msg)
 
         out = self.api.decorate(resource.context,
@@ -88,7 +86,7 @@ class Action(object):
 
         input_options = self.process_args(args)
         try:
-            options[u'body'] = input_options[u'body']
+            options[u'data'] = input_options[u'body']
         except KeyError:
             pass
 
