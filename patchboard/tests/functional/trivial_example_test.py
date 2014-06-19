@@ -23,11 +23,11 @@ pytest.mark.usefixtures(trivial_net_pb,
                         trivial_net_question)
 
 
-def test_correct_type(trivial_net_user):
+def test_useer_type(trivial_net_user):
     assert isinstance(trivial_net_user, resources.User)
 
 
-def test_correct_actions(trivial_net_user):
+def test_user_actions(trivial_net_user):
     assert hasattr(trivial_net_user, u'get')
     assert ismethod(trivial_net_user.get)
 
@@ -35,5 +35,19 @@ def test_correct_actions(trivial_net_user):
     assert ismethod(trivial_net_user.delete)
 
 
-#def test_question(trivial_net_question):
-#    assert isinstance(trivial_net_question, resources.Question)
+@pytest.mark.xfail
+def test_question_type(trivial_net_question):
+    assert isinstance(trivial_net_question, resources.Question)
+
+
+@pytest.mark.xfail
+def test_question_actions(trivial_net_question):
+    assert hasattr(trivial_net_question, u'answer')
+    assert ismethod(trivial_net_user.answer)
+
+
+@pytest.mark.xfail
+def test_question_answer(trivial_net_question):
+    result = trivial_net_question.answer({u'letter': u'd'})
+    assert result.success
+    assert result.correct == u'd'
