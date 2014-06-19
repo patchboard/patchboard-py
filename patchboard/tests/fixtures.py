@@ -8,6 +8,7 @@ import json
 import pytest
 import imp
 from collections import namedtuple
+from random import randint
 
 import patchboard.resource
 from patchboard import discover, Patchboard
@@ -237,3 +238,14 @@ def trivial_net_resources(trivial_net_pb):
 @pytest.fixture(scope=u'class')
 def trivial_net_users(trivial_net_resources):
     return trivial_net_resources.users
+
+
+@pytest.fixture(scope=u'class')
+def trivial_net_user(trivial_net_users):
+    login = "foo-{0}".format(randint(1, 100000))
+    return trivial_net_users.create({u'login': login})
+
+
+@pytest.fixture(scope=u'class')
+def trivial_net_question(trivial_net_user):
+    return trivial_net_user.questions({u'category': u'Science'}).ask()

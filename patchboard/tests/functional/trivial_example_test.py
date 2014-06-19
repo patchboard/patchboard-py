@@ -8,17 +8,32 @@
 from __future__ import print_function
 
 import pytest
-from random import randint
+from inspect import ismethod
 
-
+from patchboard import resources
 from patchboard.tests.fixtures import (trivial_net_pb,
                                        trivial_net_resources,
-                                       trivial_net_users)
+                                       trivial_net_users,
+                                       trivial_net_user,
+                                       trivial_net_question)
 pytest.mark.usefixtures(trivial_net_pb,
                         trivial_net_resources,
-                        trivial_net_users)
+                        trivial_net_users,
+                        trivial_net_user,
+                        trivial_net_question)
 
 
-def test_users_create(trivial_net_users):
-    login = "foo-{0}".format(randint(1, 100000))
-    user = trivial_net_users.create({u'login': login})
+def test_correct_type(trivial_net_user):
+    assert isinstance(trivial_net_user, resources.User)
+
+
+def test_correct_actions(trivial_net_user):
+    assert hasattr(trivial_net_user, u'get')
+    assert ismethod(trivial_net_user.get)
+
+    assert hasattr(trivial_net_user, u'delete')
+    assert ismethod(trivial_net_user.delete)
+
+
+#def test_question(trivial_net_question):
+#    assert isinstance(trivial_net_question, resources.Question)
