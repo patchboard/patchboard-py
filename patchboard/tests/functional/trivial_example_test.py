@@ -19,7 +19,6 @@ pytest.mark.usefixtures(trivial_net_pb,
                         trivial_net_users)
 
 
-@pytest.mark.xfail
 def test_users_create(trivial_net_users):
     login = "foo-{0}".format(randint(1, 100000))
     user = trivial_net_users.create({u'login': login})
