@@ -35,7 +35,7 @@ class ResourceType(type):
                         # play.py, as you can see by replacing this definition
                         # with the commented out one
                         def fn(self):
-                            print("attributes:", self.attributes)
+                            print("fn attributes:", self.attributes)
                             return self.attributes[name]
                         #def fn(self, arg):
                         #    print("attributes:", self.attributes)
@@ -106,11 +106,13 @@ class Resource(object):
                     if mapping.query:
                         # TODO: find a way to define this at runtime,
                         # not once for every instance.
-                        def fn(self, params={}):
-                            params[u'url'] = value[u'url']
-                            url = mapping.generate_url(params)
-                            return mapping.cls(context, {u'url': url})
-                        setattr(instance, key, fn)
+                        def bind(value, mapping):
+                            def fn(self, params={}):
+                                params[u'url'] = value[u'url']
+                                url = mapping.generate_url(params)
+                                return mapping.cls(context, {u'url': url})
+                            return fn
+                        setattr(instance, key, bind(value, mapping))
                     else:
                         attributes[key] = mapping.cls(context, value)
                 else:
