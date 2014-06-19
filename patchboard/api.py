@@ -34,7 +34,7 @@ class API(object):
     def find_mapping(self, schema):
         id = schema.get(u'id', None) or schema.get(u'$ref', None)
         if id:
-            name = id.split(u'#').last
+            name = id.split(u'#')[-1]
             return self.mappings.get(name, None)
         else:
             return None
