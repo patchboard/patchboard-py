@@ -30,8 +30,16 @@ class ResourceType(type):
             if u'properties' in schema:
                 for name, schema_def in schema[u'properties'].iteritems():
                     def bind_property(name):
+                        # FIXME: this is where the function is constructed
+                        # that gets called at the point of error in
+                        # play.py, as you can see by replacing this definition
+                        # with the commented out one
                         def fn(self):
+                            print("attributes:", self.attributes)
                             return self.attributes[name]
+                        #def fn(self, arg):
+                        #    print("attributes:", self.attributes)
+                        #    return self.attributes[name]
                         return fn
 
                     setattr(cls, name, bind_property(name))
