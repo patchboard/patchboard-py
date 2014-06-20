@@ -46,7 +46,7 @@ def test_question_type(trivial_net_question):
 #@pytest.mark.xfail
 def test_question_actions(trivial_net_question):
     assert hasattr(trivial_net_question, u'answer')
-    assert ismethod(trivial_net_user.answer)
+    assert ismethod(trivial_net_question.answer)
 
 
 #@pytest.mark.xfail

@@ -22,8 +22,4 @@ print("questions type:", type(questions))
 question = questions.ask()
 print("question type:", type(question))
 
-# FIXME: this call fails
 result = question.answer({u'letter': u'd'})
-#print("result type:", type(result))
-#print(result.correct)
-#print(result.success)

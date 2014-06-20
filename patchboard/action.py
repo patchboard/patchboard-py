@@ -74,15 +74,11 @@ class Action(object):
             u'method': self.method,
             u'headers': headers, }
 
-        # FIXME: may not be the correct solution. I don't see where
-        # context would ever aquire an 'authorizer' method in the ruby
-        # code, and in any case we need to be certain of the pythonic
-        # analog.
         if (hasattr(self, u'auth_scheme') and
                 hasattr(context, u'authorizer') and
                 callable(context.authorizer)):
 
-            credential = context[u'authorizer'](
+            credential = context.authorizer(
                 self.auth_scheme, resource, self.name)
             headers["Authorization"] = "{0} {1}".format(
                 self.auth_scheme, credential)
