@@ -43,13 +43,13 @@ def test_question_type(trivial_net_question):
     assert isinstance(trivial_net_question, resources.Question)
 
 
-@pytest.mark.xfail
+#@pytest.mark.xfail
 def test_question_actions(trivial_net_question):
     assert hasattr(trivial_net_question, u'answer')
     assert ismethod(trivial_net_user.answer)
 
 
-@pytest.mark.xfail
+#@pytest.mark.xfail
 def test_question_answer(trivial_net_question):
     result = trivial_net_question.answer({u'letter': u'd'})
     assert result.success

@@ -31,16 +31,34 @@ class ResourceType(type):
                 for name, schema_def in schema[u'properties'].iteritems():
 
                     property_mapping = cls.api.find_mapping(schema_def)
-                    if property_mapping and property_mapping.query:
-                        def bind_property(name, property_mapping):
-                            def fn(self, params={}):
-                                params[u'url'] = self.attributes[name][u'url']
-                                url = property_mapping.generate_url(params)
-                                return property_mapping.cls(self.context,
-                                                            {u'url': url})
+                    if property_mapping:
+                        if property_mapping.query:
+                            # FIXME: Put in a separate method
+                            def bind_property_mapping(name, property_mapping):
+                                def fn(self, params={}):
+                                    params[u'url'] = self.attributes[name][u'url']
+                                    url = property_mapping.generate_url(params)
+                                    return property_mapping.cls(self.context,
+                                                                {u'url': url})
+                                return fn
+                            setattr(cls, name, bind_property_mapping(
+                                name,
+                                property_mapping))
+                        else:
+                            def bind_property_query(name, property_mapping):
+                                def fn(self):
+                                    return property_mapping.cls(
+                                        self.context,
+                                        self.attributes[name])
+                            setattr(cls, name, bind_property_query(
+                                name,
+                                property_mapping))
+                    else:
+                        def bind_property_nomapping(name):
+                            def fn(self):
+                                return self.attributes[name]
                             return fn
-                        setattr(cls, name, bind_property(name,
-                                                         property_mapping))
+                        setattr(cls, name, bind_property_nomapping(name))
 
             # The 'is not False' only matters if additionalProperties is
             # None, basically--are these semantics critical?
