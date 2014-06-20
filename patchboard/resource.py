@@ -45,12 +45,14 @@ class ResourceType(type):
             # The 'is not False' only matters if additionalProperties is
             # None, basically--are these semantics critical?
             if schema.get(u'additionalProperties', False) is not False:
-                def additional_fn(self, name, *args):
-                    # TODO: see if this is the right implementation; the
-                    # ruby code intercepts calls *before* normal lookup,
-                    # so possibly this should use __getattribute__. OTOH
-                    # that may just be an artifact of Ruby and not part
-                    # of the design.
+                def additional_fn(self, name):
+                    # TODO: this may not be the correct semantics--
+                    # in python we don't have access to the arguments and
+                    # so can't condition the return value on them as the ruby
+                    # code does.
+                    # For that matter, why use method_missing at all? Why
+                    # not just set methods for all the names in @attributes?
+                    # So that explicitly set attributes can override them?
                     try:
                         return self.attributes[name]
                     except KeyError:
