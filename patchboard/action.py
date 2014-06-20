@@ -77,7 +77,7 @@ class Action(object):
         # context would ever aquire an 'authorizer' method in the ruby
         # code, and in any case we need to be certain of the pythonic
         # analog.
-        if self.auth_scheme and u'authorizer' in context:
+        if hasattr(self, u'auth_scheme') and u'authorizer' in context:
 
             credential = context[u'authorizer'](
                 self.auth_scheme, resource, self.name)
