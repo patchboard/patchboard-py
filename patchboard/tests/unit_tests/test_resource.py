@@ -12,6 +12,9 @@ from patchboard.tests.fixtures import mock_pb, net_pb, pb
 pytest.mark.usefixtures(mock_pb, net_pb, pb)
 
 
+# FIXME: these tests should compare with hard-coded data rather than
+# data from the Ruby client
+@pytest.mark.xfail
 def test_endpoint_classes(pb):
     with open(u"patchboard/tests/data/endpoint_classes.json", u"r") as file:
         ruby_classes = json.load(file)
