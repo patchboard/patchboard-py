@@ -11,7 +11,7 @@ import pytest
 from inspect import ismethod
 
 
-#from patchboard import PatchboardResources
+import patchboard
 from patchboard import Patchboard
 from patchboard.mapping import Mapping
 
@@ -43,17 +43,17 @@ def test_action_methods(trivial_repo):
     assert ismethod(trivial_repo.delete)
 
 
-def test_attributes(trivial_repo):
+def test_attr_types(trivial_repo):
     for key in [u'name', u'owner', u'refs']:
         assert trivial_repo.attributes[key]
         assert hasattr(trivial_repo, key)
-        assert callable(getattr(trivial_repo, key))
 
 
 def test_attr_methods(trivial_repo):
-    assert ismethod(trivial_repo.name)
-    assert ismethod(trivial_repo.owner)
-    assert ismethod(trivial_repo.refs)
+    assert(isinstance(trivial_repo.name, str) or
+           isinstance(trivial_repo.name, unicode))
+    assert isinstance(trivial_repo.owner, patchboard.resources.User)
+    assert type(trivial_repo.refs) == dict
 
 
 # FIXME: implement the rest of the decoration tests
