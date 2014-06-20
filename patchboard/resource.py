@@ -64,15 +64,17 @@ class ResourceType(type):
             classmethod(
                 lambda(self_, params): mapping.generate_url(params)))
 
-        for name, action in definition[u'actions'].iteritems():
-            action = Action(patchboard, name, action)
+        if definition:
+            actions = definition.get(u'actions', {})
+            for name, action in actions.iteritems():
+                action = Action(patchboard, name, action)
 
-            def bind_action(action):
-                def action_fn(self, *args):
-                    return action.request(self, self.url, *args)
-                return action_fn
+                def bind_action(action):
+                    def action_fn(self, *args):
+                        return action.request(self, self.url, *args)
+                    return action_fn
 
-            setattr(cls, name, bind_action(action))
+                setattr(cls, name, bind_action(action))
 
         # Must be called last
         super(ResourceType, cls).__init__(name, (Resource,), {})
