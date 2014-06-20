@@ -52,15 +52,15 @@ class ResourceType(type):
                                         self.context,
                                         self.attributes[name])
                                 return fn
-                            setattr(cls, name, bind_property_mapping(
+                            setattr(cls, name, property(bind_property_mapping(
                                 name,
-                                property_mapping))
+                                property_mapping)))
                     else:
                         def bind_property_nomapping(name):
                             def fn(self):
                                 return self.attributes[name]
                             return fn
-                        setattr(cls, name, bind_property_nomapping(name))
+                        setattr(cls, name, property(bind_property_nomapping(name)))
 
             # The 'is not False' only matters if additionalProperties is
             # None, basically--are these semantics critical?
