@@ -8,6 +8,26 @@ from __future__ import print_function
 from mapping import Mapping
 
 
+class SchemaStruct(object):
+
+    def __init__(self, output_struct):
+        # FIXME: should accept a schema and only expose the attributes
+        # in the schema rather than exposing everything in the dict
+        self.data = output_struct
+
+    def __getattr__(self, name):
+        try:
+            return self.data[name]
+        except KeyError:
+            raise AttributeError
+
+
+class SchemaArray(list):
+    def __init__(self, array):
+        super(list, self).__init__(array)
+        self.response = None
+
+
 class API(object):
     """
     Interprets and represents a JSON API definition.
@@ -58,9 +78,11 @@ class API(object):
                 # then becomes important.
                 data = [self.decorate(context, schema[u'items'], item)
                         for item in data]
+                data = SchemaArray(data)
+
             elif schema_type == u'object':
                 if u'properties' in schema:
-                    for key, prop_schema in schema[u'properties']:
+                    for key, prop_schema in schema[u'properties'].iteritems():
                         value = data.get(key, None)
                         if value:
                             data[key] = self.decorate(
@@ -78,5 +100,7 @@ class API(object):
                                 context,
                                 schema[u'additionalProperties'],
                                 value)
+
+                data = SchemaStruct(data)
 
         return data

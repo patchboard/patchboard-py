@@ -23,7 +23,7 @@ pytest.mark.usefixtures(trivial_net_pb,
                         trivial_net_question)
 
 
-def test_useer_type(trivial_net_user):
+def test_user_type(trivial_net_user):
     assert isinstance(trivial_net_user, resources.User)
 
 

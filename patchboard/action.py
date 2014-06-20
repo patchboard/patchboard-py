@@ -21,7 +21,8 @@ class Action(object):
         self.schema_manager = patchboard.schema_manager
         self.method = definition[u'method']
 
-        self.headers = {}
+        # Avoid using compression
+        self.headers = {u'accept-encoding': u'identity'}
 
         request = definition.get(u'request', None)
         response = definition.get(u'response', None)

@@ -49,10 +49,9 @@ class ResourceType(type):
                     # TODO: this may not be the correct semantics--
                     # in python we don't have access to the arguments and
                     # so can't condition the return value on them as the ruby
+                    # code does. If we need that, just have __getattr__
+                    # return a method_missing method that does what the Ruby
                     # code does.
-                    # For that matter, why use method_missing at all? Why
-                    # not just set methods for all the names in @attributes?
-                    # So that explicitly set attributes can override them?
                     try:
                         return self.attributes[name]
                     except KeyError:

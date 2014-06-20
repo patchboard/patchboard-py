@@ -54,3 +54,6 @@ def test_attr_methods(trivial_repo):
     assert ismethod(trivial_repo.name)
     assert ismethod(trivial_repo.owner)
     assert ismethod(trivial_repo.refs)
+
+
+# FIXME: implement the rest of the decoration tests
