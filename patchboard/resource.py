@@ -29,21 +29,21 @@ class ResourceType(type):
         if schema:
             if u'properties' in schema:
                 for name, schema_def in schema[u'properties'].iteritems():
-                    def bind_property(name):
-                        # FIXME: this is where the function is constructed
-                        # that gets called at the point of error in
-                        # play.py, as you can see by replacing this definition
-                        # with the commented out one
-                        def fn(self):
-                            print("fn attributes:", self.attributes)
-                            return self.attributes[name]
-                        #def fn(self, arg):
-                        #    print("attributes:", self.attributes)
-                        #    return self.attributes[name]
-                        return fn
 
-                    setattr(cls, name, bind_property(name))
+                    property_mapping = cls.api.find_mapping(schema_def)
+                    if property_mapping and property_mapping.query:
+                        def bind_property(name, property_mapping):
+                            def fn(self, params={}):
+                                params[u'url'] = self.attributes[name][u'url']
+                                url = property_mapping.generate_url(params)
+                                return property_mapping.cls(self.context,
+                                                            {u'url': url})
+                            return fn
+                        setattr(cls, name, bind_property(name,
+                                                         property_mapping))
 
+            # The 'is not False' only matters if additionalProperties is
+            # None, basically--are these semantics critical?
             if schema.get(u'additionalProperties', False) is not False:
                 def additional_fn(self, name, *args):
                     # TODO: see if this is the right implementation; the
@@ -84,42 +84,20 @@ class Resource(object):
     @classmethod
     def decorate(cls, instance, attributes):
         # TODO: non destructive decoration
-        # TODO: add some sort of validation for the input attributes.
+        # TODO: add some sort of validation for the input attributes
 
-        try:
-            class_schema = cls.schema
-        except AttributeError:
-            class_schema = None
-
-        if class_schema and u'properties' in class_schema:
-            context = instance.context
-            properties = class_schema[u'properties']
-            for key, sub_schema in properties.iteritems():
-
-                if key not in attributes:
-                    next
-
-                value = attributes[key]
-
-                mapping = cls.api.find_mapping(sub_schema)
-                if mapping:
-                    if mapping.query:
-                        # TODO: find a way to define this at runtime,
-                        # not once for every instance.
-                        def bind(value, mapping):
-                            def fn(self, params={}):
-                                params[u'url'] = value[u'url']
-                                url = mapping.generate_url(params)
-                                return mapping.cls(context, {u'url': url})
-                            return fn
-                        setattr(instance, key, bind(value, mapping))
-                    else:
-                        attributes[key] = mapping.cls(context, value)
-                else:
-                    attributes[key] = cls.api.decorate(
-                        context,
-                        sub_schema,
-                        value)
+        class_schema = getattr(cls, u'schema', None)
+        if class_schema:
+            properties = class_schema.get(u'properties', None)
+            if properties:
+                for key, sub_schema in properties.iteritems():
+                    value = attributes.get(key, None)
+                    mapping = cls.api.find_mapping(sub_schema)
+                    if value and not mapping:
+                        attributes[key] = cls.api.decorate(
+                            instance.context,
+                            sub_schema,
+                            value)
 
         return attributes
 
