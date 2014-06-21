@@ -22,9 +22,10 @@ class SchemaManager(object):
         for schema_source in self.schemas:
             source_id = schema_source[u'id'].rstrip(u'#')
 
-            for name, schema in schema_source[u'definitions'].iteritems():
-
-                self.index_schema(source_id, name, schema)
+            # TODO: Is this test necessary?
+            if u'definitions' in schema_source:
+                for name, schema in schema_source[u'definitions'].iteritems():
+                    self.index_schema(source_id, name, schema)
 
     def index_schema(self, source_id, name, schema):
         # FIXME: extensions and refs are not imported

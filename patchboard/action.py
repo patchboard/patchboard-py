@@ -84,10 +84,7 @@ class Action(object):
                 self.auth_scheme, credential)
 
         input_options = self.process_args(args)
-        try:
-            options[u'data'] = input_options[u'body']
-        except KeyError:
-            pass
+        options[u'data'] = input_options.get(u'body', None)
 
         # This code looks forward to the time when we have figured out
         # how we want Patchboard clients to take extra arguments for
