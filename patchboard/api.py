@@ -71,12 +71,12 @@ class API(object):
         else:
             # Otherwise traverse the schema in search of subschemas
             # that have resource classes available.
-            schema_type = schema[u'type']
+            schema_type = schema.get(u'type', None)
             if schema_type == u'array':
                 # TODO: handle the case where schema.items is an array,
                 # which signifies a tuple.  schema.additionalItems
                 # then becomes important.
-                data = [self.decorate(context, schema[u'items'], item)
+                data = [self.decorate(context, schema.get(u'items', None), item)
                         for item in data]
                 data = SchemaArray(data)
 
