@@ -42,7 +42,7 @@ class API(object):
 
     def decorate(self, context, schema, data):
         if not schema:
-            return data
+            return SchemaStruct(data)
 
         mapping = self.find_mapping(schema)
         if mapping:
@@ -82,6 +82,9 @@ class API(object):
                                 schema[u'additionalProperties'],
                                 value)
 
+                data = SchemaStruct(data)
+
+            elif isinstance(data, dict):
                 data = SchemaStruct(data)
 
         return data
