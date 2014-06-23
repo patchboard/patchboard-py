@@ -11,7 +11,6 @@ import pytest
 from inspect import ismethod
 
 
-import patchboard
 from patchboard import Patchboard
 from patchboard.mapping import Mapping
 
@@ -49,10 +48,11 @@ def test_attr_types(trivial_repo):
         assert hasattr(trivial_repo, key)
 
 
-def test_attr_methods(trivial_repo):
+def test_attr_methods(trivial_namespace, trivial_repo):
     assert(isinstance(trivial_repo.name, str) or
            isinstance(trivial_repo.name, unicode))
-    assert isinstance(trivial_repo.owner, patchboard.resources.User)
+    namespace = trivial_namespace[u'namespace']
+    assert isinstance(trivial_repo.owner, namespace.User)
     assert type(trivial_repo.refs) == dict
 
 

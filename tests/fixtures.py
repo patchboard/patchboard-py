@@ -44,7 +44,7 @@ def net_pb():
 
 
 # For tests that should run with both
-@pytest.fixture(scope=u'class', params=range(0, 1))
+@pytest.fixture(scope=u'class', params=range(0, 2))
 def pb(request, mock_pb, net_pb):
     return [mock_pb, net_pb][request.param]
 
@@ -129,7 +129,7 @@ def trivial_schema_manager(trivial_api):
 # test in the default, a dummy class, and a dummy module. Some code needs
 # a textual name and some the namespace object, so this fixture returns
 # both in pairs so they stay in sync.
-@pytest.fixture(scope=u'class', params=range(0, 1))
+@pytest.fixture(scope=u'class', params=range(0, 3))
 def trivial_namespace(request):
     return [
         # Hardcode the default resource namespace
