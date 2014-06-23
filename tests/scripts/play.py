@@ -4,7 +4,6 @@
 from __future__ import print_function
 
 from random import randint
-#from pprint import pprint
 
 from patchboard import discover
 

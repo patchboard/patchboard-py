@@ -8,8 +8,7 @@ import json
 import pytest
 
 
-from patchboard.tests.fixtures import (mock_pb, net_pb, mock_api, net_api,
-                                       api)
+from tests.fixtures import (mock_pb, net_pb, mock_api, net_api, api)
 pytest.mark.usefixtures(mock_pb, net_pb, mock_api, net_api, api)
 
 
@@ -18,21 +17,21 @@ def test_service_url(api):
 
 
 def test_resources(api):
-    with open(u"patchboard/tests/data/api_resources.json", u"r") as file:
+    with open(u"tests/data/api_resources.json", u"r") as file:
         ruby_resources = json.load(file)
 
     assert ruby_resources == api.resources
 
 
 def test_schemas(api):
-    with open(u"patchboard/tests/data/api_schemas.json", u"r") as file:
+    with open(u"tests/data/api_schemas.json", u"r") as file:
         ruby_schemas = json.load(file)
 
     assert ruby_schemas == api.schemas
 
 
 def test_mappings(api):
-    with open(u"patchboard/tests/data/api_mappings.json", u"r") as file:
+    with open(u"tests/data/api_mappings.json", u"r") as file:
         ruby_mappings = json.load(file)
 
     # Should really parse the value object names and compare

@@ -11,8 +11,8 @@ from patchboard import Patchboard
 from patchboard.client import Client
 from patchboard.endpoints import Endpoints
 
-from patchboard.tests.fixtures import (mock_pb, net_pb, pb,
-                                       mock_client, net_client, client)
+from tests.fixtures import (mock_pb, net_pb, pb,
+                            mock_client, net_client, client)
 pytest.mark.usefixtures(mock_pb, net_pb, pb,
                         mock_client, net_client, client)
 
@@ -37,7 +37,7 @@ def test_spawn_creator():
     def context_creator():
         return {}
 
-    with open(u"patchboard/tests/data/api.json", u'r') as file:
+    with open(u"tests/data/api.json", u'r') as file:
         api_spec = json.load(file)
 
     pb = Patchboard(api_spec, options={u'context_creator':

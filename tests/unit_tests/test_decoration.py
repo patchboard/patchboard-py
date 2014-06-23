@@ -15,9 +15,9 @@ import patchboard
 from patchboard import Patchboard
 from patchboard.mapping import Mapping
 
-from patchboard.tests.fixtures import (trivial_spec, trivial_namespace,
-                                       trivial_pb, trivial_mapping,
-                                       trivial_data, trivial_repo)
+from tests.fixtures import (trivial_spec, trivial_namespace,
+                            trivial_pb, trivial_mapping,
+                            trivial_data, trivial_repo)
 pytest.mark.usefixtures(trivial_spec, trivial_namespace, trivial_pb,
                         trivial_mapping, trivial_data, trivial_repo)
 
