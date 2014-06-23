@@ -17,6 +17,25 @@ from patchboard.schema_manager import SchemaManager
 from patchboard.action import Action
 
 
+# Should we run the bitvault tests against the pandastrike test server
+# as well as against canned data?
+run_ps = False
+
+if run_ps:
+    bv_range = range(0, 2)
+else:
+    bv_range = range(0, 1)
+
+
+# Should we test namespace injection?
+# 0 is the default, the others test that we can inject the classes
+# into a class and a module respectively
+# Full range
+#namespace_range = range(0, 3)
+# Test module injection only
+namespace_range = range(2, 3)
+
+
 # A namespace to put symbols in
 class PatchboardTestClass:
     pass
@@ -44,7 +63,7 @@ def net_pb():
 
 
 # For tests that should run with both
-@pytest.fixture(scope=u'class', params=range(0, 2))
+@pytest.fixture(scope=u'class', params=bv_range)
 def pb(request, mock_pb, net_pb):
     return [mock_pb, net_pb][request.param]
 
@@ -60,7 +79,7 @@ def net_client(net_pb):
 
 
 # For tests that should run with both
-@pytest.fixture(scope=u'class', params=range(0, 2))
+@pytest.fixture(scope=u'class', params=bv_range)
 def client(request, mock_client, net_client):
     return [mock_client, net_client][request.param]
 
@@ -76,7 +95,7 @@ def net_api(net_pb):
 
 
 # For tests that should run with both
-@pytest.fixture(scope=u'class', params=range(0, 2))
+@pytest.fixture(scope=u'class', params=bv_range)
 def api(request, mock_api, net_api):
     return [mock_api, net_api][request.param]
 
@@ -91,7 +110,7 @@ def net_schema_manager(net_pb):
     return net_pb.schema_manager
 
 
-@pytest.fixture(scope=u'class', params=range(0, 2))
+@pytest.fixture(scope=u'class', params=bv_range)
 def schema_manager(request, mock_schema_manager, net_schema_manager):
     return [mock_schema_manager, net_schema_manager][request.param]
 
@@ -129,7 +148,7 @@ def trivial_schema_manager(trivial_api):
 # test in the default, a dummy class, and a dummy module. Some code needs
 # a textual name and some the namespace object, so this fixture returns
 # both in pairs so they stay in sync.
-@pytest.fixture(scope=u'class', params=range(0, 3))
+@pytest.fixture(scope=u'class', params=namespace_range)
 def trivial_namespace(request):
     return [
         # Hardcode the default resource namespace
