@@ -197,6 +197,32 @@ def trivial_repo(trivial_mapping, trivial_data):
     return trivial_mapping.cls({}, trivial_data)
 
 
+@pytest.fixture(scope=u'class')
+def trivial_owner(trivial_repo):
+    return trivial_repo.owner
+
+
+@pytest.fixture(scope=u'class')
+def trivial_refs(trivial_repo):
+    return trivial_repo.refs
+
+
+@pytest.fixture(scope=u'class')
+def trivial_tags(trivial_refs):
+    return trivial_refs[u'tags']
+    # FIXME: maybe 'refs' should be an api.SchemaStruct or similar object
+    # so that we can access as in ruby:
+    #return trivial_refs.tags
+
+
+@pytest.fixture(scope=u'class')
+def trivial_branches(trivial_refs):
+    return trivial_refs[u'branches']
+    # FIXME: maybe'refs' should be an api.SchemaStruct or similar object
+    # so that we can access as in ruby:
+    #return trivial_refs.branches
+
+
 # Mocks for test_action
 @pytest.fixture(scope=u'class')
 def MockPB():

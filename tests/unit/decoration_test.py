@@ -16,9 +16,13 @@ from patchboard.mapping import Mapping
 
 from tests.fixtures import (trivial_spec, trivial_namespace,
                             trivial_pb, trivial_mapping,
-                            trivial_data, trivial_repo)
+                            trivial_data, trivial_repo,
+                            trivial_owner, trivial_refs, trivial_tags,
+                            trivial_branches)
 pytest.mark.usefixtures(trivial_spec, trivial_namespace, trivial_pb,
-                        trivial_mapping, trivial_data, trivial_repo)
+                        trivial_mapping, trivial_data, trivial_repo,
+                        trivial_owner, trivial_refs, trivial_tags,
+                        trivial_branches)
 
 
 # These tests don't entirely belong here
@@ -48,12 +52,56 @@ def test_attr_types(trivial_repo):
         assert hasattr(trivial_repo, key)
 
 
-def test_attr_methods(trivial_namespace, trivial_repo):
+def test_repo_attrs(trivial_repo):
     assert(isinstance(trivial_repo.name, str) or
            isinstance(trivial_repo.name, unicode))
-    namespace = trivial_namespace[u'namespace']
-    assert isinstance(trivial_repo.owner, namespace.User)
     assert type(trivial_repo.refs) == dict
 
 
-# FIXME: implement the rest of the decoration tests
+def test_owner_type(trivial_namespace, trivial_owner):
+    namespace = trivial_namespace[u'namespace']
+    assert isinstance(trivial_owner, namespace.User)
+
+
+def test_owner_actions(trivial_owner):
+    assert ismethod(trivial_owner.get)
+    assert ismethod(trivial_owner.update)
+
+
+def test_owner_attributes(trivial_owner):
+    attrs = trivial_owner.attributes
+    assert (isinstance(attrs[u'login'], str) or
+            isinstance(attrs[u'login'], unicode))
+    assert (isinstance(attrs[u'email'], str) or
+            isinstance(attrs[u'email'], unicode))
+    assert trivial_owner.login == attrs[u'login']
+    assert trivial_owner.email == attrs[u'email']
+
+
+def test_repo_refs(trivial_refs):
+    assert isinstance(trivial_refs, dict)
+    # FIXME: Ruby uses a Hashie::Mash here; if we did that this would
+    # have to become something like
+    #namespace = trivial_namespace[u'namespace']
+    #assert isinstance(trivial_refs, namespace.api.SchemaStruct)
+
+
+def test_ref_tags(trivial_tags):
+    assert isinstance(trivial_tags, list)
+    for tag in trivial_tags:
+        # FIXME: these are elements of tag.attributes in Ruby--which is
+        # correct?
+        assert tag[u'name']
+        assert tag[u'commit']
+        assert tag[u'message']
+
+
+def test_branches(trivial_branches):
+    # FIXME: this is a Hashie::Mash in Ruby
+    print("branches type:", type(trivial_branches))
+    assert isinstance(trivial_branches, dict)
+    for branch in trivial_branches.values():
+        # FIXME: branch should be a Branch resource class, not a dict
+        assert not isinstance(branch, dict)
+    #    assert ismethod(trivial_branches.get)
+    #    assert ismethod(trivial_branches.delete)

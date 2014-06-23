@@ -117,10 +117,9 @@ class Resource(object):
                     value = attributes.get(key, None)
                     mapping = cls.api.find_mapping(sub_schema)
                     if value and not mapping:
-                        attributes[key] = cls.api.decorate(
-                            instance.context,
-                            sub_schema,
-                            value)
+                        attributes[key] = cls.api.decorate(instance.context,
+                                                           sub_schema,
+                                                           value)
 
         return attributes
 
