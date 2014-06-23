@@ -6,26 +6,7 @@
 from __future__ import print_function
 
 from mapping import Mapping
-
-
-class SchemaStruct(object):
-
-    def __init__(self, output_struct):
-        # FIXME: should accept a schema and only expose the attributes
-        # in the schema rather than exposing everything in the dict
-        self.data = output_struct
-
-    def __getattr__(self, name):
-        try:
-            return self.data[name]
-        except KeyError:
-            raise AttributeError
-
-
-class SchemaArray(list):
-    def __init__(self, array):
-        super(list, self).__init__(array)
-        self.response = None
+from util import SchemaStruct, SchemaArray
 
 
 class API(object):
