@@ -74,7 +74,7 @@ class API(object):
                 # TODO: handle schema.patternProperties
                 # TODO: consider alternative to iterating over all keys.
                 if u'additionalProperties' in schema:
-                    for key, value in data:
+                    for key, value in data.iteritems():
                         if (u'properties' not in schema or
                                 key not in schema[u'properties']):
                             data[key] = self.decorate(
