@@ -125,8 +125,8 @@ class Resource(object):
 
     def __init__(self, context, attributes={}):
         self.context = context
-        self.attributes = Resource.decorate(self, attributes)
-        self.url = self.attributes[u'url']
+        self.attributes = self.decorate(self, attributes)
+        self.url = self.attributes.get(u'url', None)
 
     # TODO: implement
     #def __str__(self):
