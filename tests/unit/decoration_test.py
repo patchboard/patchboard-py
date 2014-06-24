@@ -85,6 +85,8 @@ def test_repo_refs(trivial_refs):
 
 def test_ref_tags(trivial_tags):
     assert isinstance(trivial_tags, list)
+    # FIXME: This is the length in Ruby--why aren't we getting any entries?
+    assert len(trivial_tags) == 1
     for tag in trivial_tags:
         # FIXME: these are elements of tag.attributes in Ruby--which is
         # correct?
@@ -94,8 +96,10 @@ def test_ref_tags(trivial_tags):
 
 
 def test_branches(trivial_branches):
-    print("branches type:", type(trivial_branches))
     assert isinstance(trivial_branches, SchemaStruct)
+    # FIXME: Don't seem to have a "values" attribute, meaning no values
+    # entry in the struct's "data" dict
+    assert len(trivial_branches.values()) > 0
     for branch in trivial_branches.values():
         namespace = trivial_namespace[u'namespace']
         assert isinstance(branch, namespace.Branch)
