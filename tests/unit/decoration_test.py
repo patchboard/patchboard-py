@@ -80,11 +80,7 @@ def test_owner_attributes(trivial_owner):
 
 
 def test_repo_refs(trivial_refs):
-    assert isinstance(trivial_refs, dict)
-    # FIXME: Ruby uses a Hashie::Mash here; if we did that this would
-    # have to become something like
-    #namespace = trivial_namespace[u'namespace']
-    #assert isinstance(trivial_refs, namespace.api.SchemaStruct)
+    assert isinstance(trivial_refs, SchemaStruct)
 
 
 def test_ref_tags(trivial_tags):
@@ -98,11 +94,10 @@ def test_ref_tags(trivial_tags):
 
 
 def test_branches(trivial_branches):
-    # FIXME: this is a Hashie::Mash in Ruby
     print("branches type:", type(trivial_branches))
-    assert isinstance(trivial_branches, dict)
+    assert isinstance(trivial_branches, SchemaStruct)
     for branch in trivial_branches.values():
-        # FIXME: branch should be a Branch resource class, not a dict
-        assert not isinstance(branch, dict)
-    #    assert ismethod(trivial_branches.get)
-    #    assert ismethod(trivial_branches.delete)
+        namespace = trivial_namespace[u'namespace']
+        assert isinstance(branch, namespace.Branch)
+        assert ismethod(trivial_branches.get)
+        assert ismethod(trivial_branches.delete)
