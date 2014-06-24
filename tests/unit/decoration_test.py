@@ -13,6 +13,7 @@ from inspect import ismethod
 
 from patchboard import Patchboard
 from patchboard.mapping import Mapping
+from patchboard.util import SchemaStruct
 
 from tests.fixtures import (trivial_spec, trivial_namespace,
                             trivial_pb, trivial_mapping,
@@ -55,7 +56,7 @@ def test_attr_types(trivial_repo):
 def test_repo_attrs(trivial_repo):
     assert(isinstance(trivial_repo.name, str) or
            isinstance(trivial_repo.name, unicode))
-    assert type(trivial_repo.refs) == dict
+    assert type(trivial_repo.refs) == SchemaStruct
 
 
 def test_owner_type(trivial_namespace, trivial_owner):
