@@ -30,6 +30,7 @@ class SchemaStruct(object):
     def __getitem__(self, name):
         return self.data[name]
 
+
 class SchemaArray(list):
     def __init__(self, array):
         super(list, self).__init__(array)
