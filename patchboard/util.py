@@ -14,12 +14,12 @@ def to_camel_case(string):
     return "".join(capwords)
 
 
-class SchemaStruct(object):
+class SchemaStruct(dict):
 
-    def __init__(self, output_struct):
+    def __init__(self, dict):
         # FIXME: should accept a schema and only expose the attributes
         # in the schema rather than exposing everything in the dict
-        self.data = output_struct
+        self.data = dict
 
     def __getattr__(self, name):
         try:
@@ -28,8 +28,13 @@ class SchemaStruct(object):
             raise AttributeError
 
     def __getitem__(self, name):
-        return self.data[name]
+        return self.data.__getitem__(name)
 
+    def __setitem__(self, name, value):
+        self.data.__setitem__(name, value)
+
+    def __repr__(self):
+        return self.data.__repr__()
 
 class SchemaArray(list):
 
