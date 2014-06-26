@@ -32,6 +32,7 @@ class SchemaStruct(object):
 
 
 class SchemaArray(list):
+
     def __init__(self, array):
-        super(list, self).__init__(array)
+        super(SchemaArray, self).__init__(array)
         self.response = None
