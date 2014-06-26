@@ -1,4 +1,9 @@
-A Python client for Patchboard APIs
+patchboard-py: A Python client for Patchboard APIs
+
+
+patchboard-py is still beta code but is in active development. Bug reports and
+patches welcome.
+
 
 Install:
 
