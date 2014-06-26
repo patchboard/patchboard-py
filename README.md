@@ -8,10 +8,11 @@ Install:
    at least the 2.7 and perhaps the 2.6 series. If those versions don't fit
    your needs drop us a line and we can talk about it.
 
-2. Make sure you've installed pip (Ubuntu: python-pip), or at least setuptools
-   (python-setuptools) if you only plan to work from the source package.
+2. Make sure you've installed pip (Debian/Ubuntu: python-pip), or at least
+   setuptools (python-setuptools) if you only plan to work from the source
+   package.
 
-3. Install patchboard from the cheese shop:
+3. Install patchboard from PyPI:
 
     $ pip install patchboard
 
