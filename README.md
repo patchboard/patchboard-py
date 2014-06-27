@@ -1,11 +1,11 @@
 patchboard-py: A Python client for Patchboard APIs
 
 
-patchboard-py is still beta code but is in active development. Bug reports and
+patchboard-py is still alpha code but is in active development. Bug reports and
 patches welcome.
 
 
-Install:
+Install patchboard-py:
 
 1. Install a python 2.7 environment (the nicest way to do this is with pyenv
    and virtualenv).  It is developed under 2.7.7, and while it may work with
