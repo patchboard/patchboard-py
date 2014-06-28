@@ -7,21 +7,25 @@ patches welcome.
 
 Install patchboard-py:
 
-1. Install a python 2.7 environment (the nicest way to do this is with pyenv
-   and virtualenv).  It is developed under 2.7.7, and while it may work with
-   earlier versions that is currently untested. The goal is compatibility with
-   at least the 2.7 and perhaps the 2.6 series. If those versions don't fit
-   your needs drop us a line and we can talk about it.
+Ubuntu:
 
-2. Make sure you've installed pip (Debian/Ubuntu: python-pip), or at least
-   setuptools (python-setuptools) if you only plan to work from the source
-   package.
+Prerequisites:
 
-3. Install patchboard from PyPI:
+1. A python 2.7 environment (your distro probably does this as part of the base
+   system, but the nicer way is with pyenv and/or virtualenv). patchboard-py is
+   currently developed under 2.7.7.
 
-    $ pip install patchboard
+Installing:
 
-   or instead install from the github repo
-   (https://github.com/patchboard/patchboard-py) and run 'python setup.py
-   install', or 'python setup.py develop' if you plan to work on the codebase
-   yourself.
+Either install from PyPI:
+
+    $ sudo pip install patchboard
+
+or clone the git repository and run setup.py:
+
+    $ git clone https://github.com/patchboard/patchboard-py.git
+    $ cd patchboard-py
+    $ sudo python setup.py install
+
+(if you're using a virtual environment, you obviously don't need sudo in
+either case)
