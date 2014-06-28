@@ -8,24 +8,24 @@ import json
 import pytest
 
 
-from tests.fixtures import (mock_pb, net_pb, mock_schema_manager,
-                            net_schema_manager, schema_manager,
-                            trivial_media_type, trivial_spec,
-                            trivial_api, trivial_schema_manager)
+from patchboard.tests.fixtures import (mock_pb, net_pb, mock_schema_manager,
+                                       net_schema_manager, schema_manager,
+                                       trivial_media_type, trivial_spec,
+                                       trivial_api, trivial_schema_manager)
 pytest.mark.usefixtures(mock_pb, net_pb, mock_schema_manager,
                         net_schema_manager, schema_manager,
                         trivial_spec, trivial_api, trivial_schema_manager)
 
 
 def test_id_index(schema_manager):
-    with open(u"tests/data/schema_id_index.json", u"r") as file:
+    with open(u"patchboard/tests/data/schema_id_index.json", u"r") as file:
         correct_id_index = json.load(file)
 
     assert correct_id_index == schema_manager.id_index
 
 
 def test_structure_equality(schema_manager):
-    with open(u"tests/data/schema_id_index.json", u"r") as file:
+    with open(u"patchboard/tests/data/schema_id_index.json", u"r") as file:
         correct_id_index = json.load(file)
 
     # Create an inequality deep in the structure to verify that '=='
@@ -37,7 +37,7 @@ def test_structure_equality(schema_manager):
 
 
 def test_name_index(schema_manager):
-    with open(u"tests/data/schema_name_index.json", u"r") \
+    with open(u"patchboard/tests/data/schema_name_index.json", u"r") \
             as file:
         correct_name_index = json.load(file)
 
@@ -45,7 +45,7 @@ def test_name_index(schema_manager):
 
 
 def test_media_type_index(schema_manager):
-    with open(u"tests/data/schema_media_type_index.json", u"r") \
+    with open(u"patchboard/tests/data/schema_media_type_index.json", u"r") \
             as file:
         correct_media_type_index = json.load(file)
 

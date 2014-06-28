@@ -51,7 +51,7 @@ PatchboardTestModule = imp.new_module(u'PatchboardTestModule')
 
 @pytest.fixture(scope=u'class')
 def mock_pb():
-    with open(u"tests/data/api.json", u'r') as file:
+    with open(u"patchboard/tests/data/api.json", u'r') as file:
         api_spec = json.load(file)
 
     return Patchboard(api_spec)
@@ -125,7 +125,7 @@ def trivial_media_type(name):
 
 @pytest.fixture(scope=u'class')
 def trivial_spec():
-    with open(u"tests/data/example_api.json", u'r') as file:
+    with open(u"patchboard/tests/data/example_api.json", u'r') as file:
         api_spec = json.load(file)
 
     api_spec[u'service_url'] = "http://patchboard.it"
@@ -187,7 +187,7 @@ def trivial_mapping(trivial_pb):
 
 @pytest.fixture(scope=u'class')
 def trivial_data():
-    with open(u"tests/data/dectest.json", u'r') as file:
+    with open(u"patchboard/tests/data/dectest.json", u'r') as file:
         data = json.load(file)
     return data
 

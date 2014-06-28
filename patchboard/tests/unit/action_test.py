@@ -10,7 +10,7 @@ import json
 
 from patchboard.exception import PatchboardError
 
-from tests.fixtures import (
+from patchboard.tests.fixtures import (
     trivial_media_type,
     trivial_spec,
     trivial_api,

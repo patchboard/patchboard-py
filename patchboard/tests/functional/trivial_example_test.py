@@ -11,9 +11,9 @@ import pytest
 from inspect import ismethod
 
 from patchboard import resources
-from tests.fixtures import (trivial_net_pb, trivial_net_resources,
-                            trivial_net_users, trivial_net_user,
-                            trivial_net_question)
+from patchboard.tests.fixtures import (trivial_net_pb, trivial_net_resources,
+                                       trivial_net_users, trivial_net_user,
+                                       trivial_net_question)
 pytest.mark.usefixtures(trivial_net_pb, trivial_net_resources,
                         trivial_net_users, trivial_net_user,
                         trivial_net_question)

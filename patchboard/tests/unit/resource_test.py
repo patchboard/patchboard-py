@@ -8,7 +8,7 @@ import json
 import pytest
 from inspect import isfunction
 
-from tests.fixtures import mock_pb, net_pb, pb
+from patchboard.tests.fixtures import mock_pb, net_pb, pb
 pytest.mark.usefixtures(mock_pb, net_pb, pb)
 
 
@@ -16,7 +16,7 @@ pytest.mark.usefixtures(mock_pb, net_pb, pb)
 # data from the Ruby client
 #@pytest.mark.xfail
 def test_endpoint_classes(pb):
-    with open(u"tests/data/endpoint_classes.json", u"r") as file:
+    with open(u"patchboard/tests/data/endpoint_classes.json", u"r") as file:
         ruby_classes = json.load(file)
 
     python_classes = pb.endpoint_classes
@@ -42,7 +42,7 @@ def test_endpoint_classes(pb):
 @pytest.mark.xfail
 def test_endpoint_object_methods(pb):
     with open(
-            u"tests/data/endpoint_object_methods.json", u"r") as file:
+            u"patchboard/tests/data/endpoint_object_methods.json", u"r") as file:
         ruby_object_methods = json.load(file)
 
     for key in ruby_object_methods.keys():

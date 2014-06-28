@@ -4,7 +4,7 @@ pp = pprint.PrettyPrinter(indent=4).pprint
 
 import pytest
 
-from tests.fixtures import mock_pb, net_pb, pb
+from patchboard.tests.fixtures import mock_pb, net_pb, pb
 pytest.mark.usefixtures(mock_pb, net_pb, pb)
 
 

@@ -15,11 +15,11 @@ from patchboard import Patchboard
 from patchboard.mapping import Mapping
 from patchboard.util import SchemaStruct
 
-from tests.fixtures import (trivial_spec, trivial_namespace,
-                            trivial_pb, trivial_mapping,
-                            trivial_data, trivial_repo,
-                            trivial_owner, trivial_refs, trivial_tags,
-                            trivial_branches)
+from patchboard.tests.fixtures import (trivial_spec, trivial_namespace,
+                                       trivial_pb, trivial_mapping,
+                                       trivial_data, trivial_repo,
+                                       trivial_owner, trivial_refs,
+                                       trivial_tags, trivial_branches)
 pytest.mark.usefixtures(trivial_spec, trivial_namespace, trivial_pb,
                         trivial_mapping, trivial_data, trivial_repo,
                         trivial_owner, trivial_refs, trivial_tags,
