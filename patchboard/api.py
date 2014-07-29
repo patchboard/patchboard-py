@@ -52,39 +52,39 @@ class API(object):
         else:
             # Otherwise traverse the schema in search of subschemas
             # that have resource classes available.
-            schema_type = schema.get(u'type', None)
-            if schema_type == u'array':
+
+            items = schema.get(u'items', None)
+            if items:
                 # TODO: handle the case where schema.items is an array,
                 # which signifies a tuple.  schema.additionalItems
                 # then becomes important.
-                data = [self.decorate(context, schema.get(u'items', None), item)
+                data = [self.decorate(context, items, item)
                         for item in data]
                 data = SchemaArray(data)
 
-            elif schema_type == u'object':
-                if u'properties' in schema:
-                    for key, prop_schema in schema[u'properties'].iteritems():
-                        value = data.get(key, None)
-                        if value:
-                            data[key] = self.decorate(
-                                context,
-                                prop_schema,
-                                value)
+            properties = schema.get(u'properties', None)
+            if properties:
+                for key, prop_schema in properties.iteritems():
+                    value = data.get(key, None)
+                    if value:
+                        data[key] = self.decorate(
+                            context,
+                            prop_schema,
+                            value)
 
-                # TODO: handle schema.patternProperties
-                # TODO: consider alternative to iterating over all keys.
-                if u'additionalProperties' in schema:
-                    for key, value in data.iteritems():
-                        if (u'properties' not in schema or
-                                key not in schema[u'properties']):
-                            data[key] = self.decorate(
-                                context,
-                                schema[u'additionalProperties'],
-                                value)
+            additionalProperties = schema.get(u'additionalProperties', None)
+            if additionalProperties:
+                for key, value in data.iteritems():
+                    if (u'properties' not in schema or
+                            key not in schema[u'properties']):
+                        data[key] = self.decorate(
+                            context,
+                            schema[u'additionalProperties'],
+                            value)
 
-                data = SchemaStruct(data)
 
-            elif isinstance(data, dict):
+
+            if isinstance(data, dict):
                 data = SchemaStruct(data)
 
         return data
