@@ -1,4 +1,4 @@
-#test_schema_manager.py
+# fixtures.py
 #
 # Copyright 2014 BitVault.
 
@@ -58,8 +58,8 @@ def mock_pb():
 
 
 @pytest.fixture(scope=u'class')
-def net_pb():
-    return discover(u"http://bitvault.pandastrike.com/")
+def net_pb(api_url):
+    return discover(api_url)
 
 
 # For tests that should run with both
@@ -265,8 +265,8 @@ def mock_empty_get_action(mock_trivial_pb):
 
 
 @pytest.fixture(scope=u'class')
-def trivial_net_pb():
-    return discover(u"http://localhost:1979/")
+def trivial_net_pb(api_url):
+    return discover(api_url)
 
 
 @pytest.fixture(scope=u'class')
