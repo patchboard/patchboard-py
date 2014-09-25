@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # exception.py
 #
 # Copyright 2014 BitVault.

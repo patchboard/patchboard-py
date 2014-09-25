@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # fixtures.py
 #
 # Copyright 2014 BitVault.

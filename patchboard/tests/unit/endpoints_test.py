@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 import pprint
 pp = pprint.PrettyPrinter(indent=4).pprint

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # trivial_example.py
 #
 # Copyright 2014 BitVault.

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #test_api.py
 #
 # Copyright 2014 BitVault.

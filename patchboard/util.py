@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # util.py
 #
 # Copyright 2014 BitVault.

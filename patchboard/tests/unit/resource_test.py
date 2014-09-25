@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #test_resource.py
 #
 # Copyright 2014 BitVault.

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # mapping.py
 #
 # Copyright 2014 BitVault.
