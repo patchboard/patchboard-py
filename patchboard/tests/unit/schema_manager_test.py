@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #test_schema_manager.py
 #
-# Copyright 2014 BitVault.
+# Copyright 2014 BitVault, Inc. dba Gem
 
 from __future__ import print_function
 

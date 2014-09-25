@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # exception.py
 #
-# Copyright 2014 BitVault.
+# Copyright 2014 BitVault, Inc. dba Gem
 #
 # Exceptions for patchboard-py
 #

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #test_decoration.py
 #
-# Copyright 2014 BitVault.
+# Copyright 2014 BitVault, Inc. dba Gem
 #
 # Reproduces the tests in patchboard-rb's decoration_test.rb suite
 

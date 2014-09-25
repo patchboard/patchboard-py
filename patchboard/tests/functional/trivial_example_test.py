@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # trivial_example.py
 #
-# Copyright 2014 BitVault.
+# Copyright 2014 BitVault, Inc. dba Gem
 #
 # Reproduces the tests in trivial_example.rb
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # endpoints.py
 #
-# Copyright 2014 BitVault.
+# Copyright 2014 BitVault, Inc. dba Gem
 
 
 # debug
