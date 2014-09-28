@@ -34,7 +34,7 @@ try:
     server = subprocess.Popen(u'bin/server.coffee test/data/questions.json', cwd=trivial_dir, shell=True)
 
     # Uuuuugh, need a better way to delay until the server is listening that doesn't wait for the process to terminate.
-    sleep(2)
+    sleep(2.5)
 
     pb = discover(u'http://localhost:1979/')
     resources = pb.resources
