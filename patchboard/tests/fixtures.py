@@ -47,7 +47,7 @@ PatchboardTestModule = imp.new_module(u'PatchboardTestModule')
 
 
 ######################################################################
-# Fixtures for testing with the bitvault api
+# Fixtures for testing with the gem api
 ######################################################################
 
 @pytest.fixture(scope=u'class')

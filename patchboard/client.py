@@ -15,6 +15,10 @@ from endpoints import Endpoints
 
 class Client(object):
 
-    def __init__(self, context, api, classes):
+    def __init__(self, main_pb, context, api, classes):
+        self.main_pb = main_pb
         self.context = context
         self.resources = Endpoints(context, api, classes)
+
+    def spawn(self, context=None):
+        return self.main_pb.spawn(context)

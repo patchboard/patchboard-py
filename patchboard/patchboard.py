@@ -27,19 +27,15 @@ def discover(url, options={}):
     Retrieve the API definition from the given URL and construct
     a Patchboard to interface with it.
     """
-    # Retrieve API definition from server
     try:
         resp = requests.get(url, headers=Patchboard.default_headers)
     except Exception as e:
         raise PatchboardError("Problem discovering API: {0}".format(e))
 
-    # Parse as JSON
+    # Parse as JSON (Requests uses json.loads())
     try:
-        # Using the built-in requests json parser--find out if it
-        # is different code than the json package, if so we may have
-        # consistency issues.
         api_spec = resp.json()
-    except Exception as e:
+    except ValueError as e:
         raise PatchboardError("Unparseable API description: {0}".format(e))
 
     # Return core handle object
@@ -59,8 +55,8 @@ class Patchboard(object):
                             that returns a mapping type.  The "default
                             for the default" is {}.
 
-        resource_namespace: namespace in which to inject the resource
-                            classes.
+        resource_namespace: namespace into which  the resource classes
+                            are injected.
 
         default_headers:    dict of HTTP headers; combined with and
                             overrides the session defaults.
@@ -68,28 +64,27 @@ class Patchboard(object):
 
     default_headers = {
         u'Accept': u'application/json',
-        u'User-Agent': u'patchboard-py v0.1.0', }
+        u'User-Agent': u'patchboard-py v0.1.1', }
 
     def __init__(self, api_spec, options={}):
 
-        self.default_headers = options.get(u'default_headers', None)
+        self.default_headers = dict(Patchboard.default_headers,
+                                    **options.get(u'default_headers', {}))
         # Note--resource_namespace doesn't have to be a module--it can
         # be a class or anything else that supports setattr
-        self.resource_namespace = options.get(
-            u'resource_namespace',
-            resources)
+        self.resource_namespace = options.get(u'resource_namespace',
+                                              resources)
         self.default_context = options.get(u'default_context', {})
 
         # Each Patchboard object is a separate session
         self.session = requests.Session()
-        self.session.headers.update(Patchboard.default_headers)
-        if self.default_headers:
-            self.session.headers.update(self.default_headers)
+        self.session.headers.update(self.default_headers)
 
         self.api = API(api_spec)
 
         self.schema_manager = SchemaManager(self.api.schemas)
         self.endpoint_classes = self.create_endpoint_classes()
+
         # FIXME: this logic seems suspect. Why should we be saving
         # a context and resources created without the specified context?
         client = self.spawn({})
@@ -103,12 +98,11 @@ class Patchboard(object):
             schema = self.schema_manager.find_name(resource_name)
             resource_def = mapping.resource
             class_name = to_camel_case(str(resource_name))
-            cls = ResourceType(
-                class_name,
-                self,
-                resource_def,
-                schema,
-                mapping)
+            cls = ResourceType(class_name,
+                               self,
+                               resource_def,
+                               schema,
+                               mapping)
             mapping.cls = cls
             classes[resource_name] = cls
             setattr(self.resource_namespace, class_name, cls)
@@ -128,4 +122,4 @@ class Patchboard(object):
         if not isinstance(context, collections.Mapping):
             raise PatchboardError(u'Cannot determine a valid context')
 
-        return Client(context, self.api, self.endpoint_classes)
+        return Client(self, context, self.api, self.endpoint_classes)

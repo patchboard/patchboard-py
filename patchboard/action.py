@@ -3,7 +3,6 @@
 #
 # Copyright 2014 BitVault, Inc. dba Gem
 
-
 from __future__ import print_function
 
 import json
@@ -31,13 +30,14 @@ class Action(object):
         self.request_schema = self.response_schema = None
 
         if request:
-            self.auth_scheme = request.get(u'authorization', None)
+            self.auth_schemes = request.get(u'authorization', [])
+            if isinstance(self.auth_schemes, basestring):
+                self.auth_schemes = [self.auth_schemes]
 
-            content_type = request.get(u'type', None)
-            if content_type:
-                self.headers[u'Content-Type'] = content_type
+            if u'type' in request:
+                self.headers[u'Content-Type'] = request[u'type']
                 self.request_schema = \
-                    self.schema_manager.find_media_type(content_type)
+                    self.schema_manager.find_media_type(request[u'type'])
 
         if response and u'type' in response:
 
@@ -52,8 +52,8 @@ class Action(object):
 
         options = self.prepare_request(resource, url, *args)
 
-        raw = self.patchboard.session.request(**options)
-        response = Response(raw)
+        response = Response(self.patchboard.session.request(**options))
+
         if response.status_code != self.success_status:
             err_msg = ("Unexpected response status: " +
                        str(response.status_code) +
@@ -75,14 +75,14 @@ class Action(object):
             u'method': self.method,
             u'headers': headers, }
 
-        if (hasattr(self, u'auth_scheme') and
-                hasattr(context, u'authorizer') and
-                callable(context.authorizer)):
+        if (hasattr(self, u'auth_schemes') and
+            hasattr(context, u'authorizer') and
+            callable(context.authorizer)):
 
-            credential = context.authorizer(
-                self.auth_scheme, resource, self.name)
+            scheme, credential = context.authorizer(
+                self.auth_schemes, resource, self.name)
             headers["Authorization"] = "{0} {1}".format(
-                self.auth_scheme, credential)
+                scheme, credential)
 
         input_options = self.process_args(args)
         options[u'data'] = input_options.get(u'body', None)
@@ -101,6 +101,7 @@ class Action(object):
     def process_args(self, args):
 
         options = {}
+        # TODO: This is weird.
         signature = u'.'.join([type(arg).__name__ for arg in args])
 
         request_schema = None

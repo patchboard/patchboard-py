@@ -18,7 +18,6 @@ try:
     example_dir = glob("automatthew*")
     if not example_dir:
         if not os.path.exists(u'./pb-ex.tar.gz'):
-            retrieving
             urlretrieve(u'http://github.com/automatthew/patchboard-examples/tarball/master',
                         u'./pb-ex.tar.gz')
         with tarfile.open(u'./pb-ex.tar.gz', u'r:gz') as tar:
@@ -56,7 +55,9 @@ try:
     # server.terminate()
 
 except Exception as e:
-    if server:
+    try:
         server.kill()
+    except:
+        pass
     print(e)
     SystemExit(1)
