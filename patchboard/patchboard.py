@@ -64,7 +64,7 @@ class Patchboard(object):
 
     default_headers = {
         u'Accept': u'application/json',
-        u'User-Agent': u'patchboard-py v0.1.1', }
+        u'User-Agent': u'patchboard-py v0.5.0', }
 
     def __init__(self, api_spec, options={}):
 
