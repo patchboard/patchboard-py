@@ -29,3 +29,15 @@ or clone the git repository and run setup.py:
 
 (if you're using a virtual environment, you obviously don't need sudo in
 either case)
+
+Testing:
+
+To run the automated pytest suite with an example server:
+
+    $ python setup.py test
+
+Or you can run against your existing server with:
+
+    $ python setup.py test -a "--host=your-host --port=80"
+
+-a (--pytest-args) sends an argument string to pytest.
