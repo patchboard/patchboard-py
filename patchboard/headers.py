@@ -14,18 +14,34 @@ class Headers(object):
     WWWAuthRegex = re.compile(r'([^\s,]+)="?(^\s,"]+)"?')
 
     def parse_www_auth(string):
-        parsed = {}
-        # FIXME:  This assumes that no quoted strings have spaces within.
+        arrays = []
+        current = None
+
         tokens = string.split(" ")
-        name = tokens.pop()
-        parsed[name] = {}
+
         for token in tokens:
-            # Now I have two problems
-            match = self.WWWAuthRegex.match(token)
-            if match:
-                parsed[name][match.group(1)] = group(2)
+            if "=" in token:
+                current.append(token)
             else:
-                name = token
-                parsed[name] = {}
-        return parsed
+                current = [token]
+                arrays.push(current)
+
+
+        challenges = {}
+        for challenge in arrays:
+            name, challege[0]
+            pairs = challenge[1:]
+            if pairs.length == 0:
+                raise Exception("Invalid WWW-Authenticate header")
+
+            challenges[name] = {}
+
+            for pair in pairs:
+                match = self.WWWAuthRegex.match(pair)
+                if match:
+                    challenges[name][match.group(1)] = group(2)
+                else:
+                    raise Exception("Invalid WWW-Authenticate header")
+
+        return challenges
 
