@@ -38,7 +38,7 @@ class Endpoints(object):
 
                 def bind(name, cls, mapping):
                     def fn(params={}):
-                        if isinstance(params, str):
+                        if isinstance(params, basestring):
                             url = params
                         else:
                             url = mapping.generate_url(params)
