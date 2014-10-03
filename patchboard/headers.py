@@ -13,7 +13,8 @@ class Headers(object):
     # FIXME: also matches some="thing
     WWWAuthRegex = re.compile(r'([^\s,]+)="?(^\s,"]+)"?')
 
-    def parse_www_auth(string):
+    @classmethod
+    def parse_www_auth(cls, string):
         arrays = []
         current = None
 
@@ -24,7 +25,7 @@ class Headers(object):
                 current.append(token)
             else:
                 current = [token]
-                arrays.push(current)
+                arrays.append(current)
 
 
         challenges = {}
@@ -37,7 +38,7 @@ class Headers(object):
             challenges[name] = {}
 
             for pair in pairs:
-                match = self.WWWAuthRegex.match(pair)
+                match = cls.WWWAuthRegex.match(pair)
                 if match:
                     challenges[name][match.group(1)] = group(2)
                 else:

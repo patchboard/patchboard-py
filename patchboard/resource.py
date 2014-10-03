@@ -59,7 +59,7 @@ class ResourceType(type):
                     else:
                         def bind_property_nomapping(name):
                             def fn(self):
-                                return self.attributes[name]
+                                return self.attributes[name] if name in self.attributes else None
                             return fn
                         setattr(cls, name, property(bind_property_nomapping(name)))
 
