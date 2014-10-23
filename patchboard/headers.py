@@ -11,15 +11,13 @@ import re
 class Headers(object):
     # matches the form some="thing", some=thing
     # FIXME: also matches some="thing
-    WWWAuthRegex = re.compile(r'([^\s,]+)="?(^\s,"]+)"?')
+    WWWAuthRegex = re.compile(r'([^\s,]+)="?([^\s,"]+)"?')
 
     @classmethod
     def parse_www_auth(cls, string):
         arrays = []
         current = None
-
         tokens = string.split(" ")
-
         for token in tokens:
             if "=" in token:
                 current.append(token)
@@ -30,9 +28,9 @@ class Headers(object):
 
         challenges = {}
         for challenge in arrays:
-            name, challege[0]
+            name = challenge[0]
             pairs = challenge[1:]
-            if pairs.length == 0:
+            if len(pairs) == 0:
                 raise Exception("Invalid WWW-Authenticate header")
 
             challenges[name] = {}
@@ -40,9 +38,8 @@ class Headers(object):
             for pair in pairs:
                 match = cls.WWWAuthRegex.match(pair)
                 if match:
-                    challenges[name][match.group(1)] = group(2)
+                    challenges[name][match.group(1)] = match.group(2)
                 else:
                     raise Exception("Invalid WWW-Authenticate header")
 
         return challenges
-

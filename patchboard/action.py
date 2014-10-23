@@ -51,7 +51,6 @@ class Action(object):
     def request(self, resource, url, *args):
 
         options = self.prepare_request(resource, url, *args)
-
         response = Response(self.patchboard.session.request(**options))
 
         if response.status_code != self.success_status:
@@ -73,18 +72,19 @@ class Action(object):
         options = {
             u'url': url,
             u'method': self.method,
-            u'headers': headers, }
+            u'headers': headers }
+
+        input_options = self.process_args(args)
 
         if (hasattr(self, u'auth_schemes') and
             hasattr(context, u'authorizer') and
             callable(context.authorizer)):
 
             scheme, credential = context.authorizer(
-                self.auth_schemes, resource, self.name)
+                self.auth_schemes, resource, self.name, input_options)
             headers["Authorization"] = "{0} {1}".format(
                 scheme, credential)
 
-        input_options = self.process_args(args)
         options[u'data'] = input_options.get(u'body', None)
 
         # This code looks forward to the time when we have figured out
@@ -111,9 +111,9 @@ class Action(object):
             pass
 
         if request_schema:
-            if signature == u"str" or signature == u'unicode':
+            if signature == u'str' or signature == u'unicode':
                 options[u'body'] = args[0]
-            elif signature == u"dict" or signature == u"list":
+            elif signature == u'dict' or signature == u'list':
                 options[u'body'] = json.dumps(args[0])
             else:
                 raise PatchboardError(

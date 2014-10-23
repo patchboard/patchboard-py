@@ -17,7 +17,6 @@ class Response(object):
 
     def __init__(self, raw):
         self.raw = raw
-
         self.data = None
         try:
             if Response.content_pattern.search(raw.headers[u'Content-Type']):
