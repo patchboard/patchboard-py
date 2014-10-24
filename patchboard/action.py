@@ -8,7 +8,7 @@ from __future__ import print_function
 import json
 
 from exception import PatchboardError
-from response import Response
+from response import Response, ResponseError
 
 
 class Action(object):
@@ -49,7 +49,6 @@ class Action(object):
         self.success_status = response.get(u'status', 200)
 
     def request(self, resource, url, *args):
-
         options = self.prepare_request(resource, url, *args)
         response = Response(self.patchboard.session.request(**options))
 
@@ -57,7 +56,7 @@ class Action(object):
             err_msg = ("Unexpected response status: " +
                        str(response.status_code) +
                        " - " + response.content)
-            raise PatchboardError(err_msg)
+            raise ResponseError(response, err_msg)
 
         out = self.api.decorate(resource.context,
                                 self.response_schema,

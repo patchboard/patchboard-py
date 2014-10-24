@@ -40,5 +40,18 @@ class Response(object):
         headers = {}
         for (key, value) in self.raw.headers.iteritems():
             if u'www-authenticate' in key:
-                headers['WWW-Authenticate'] = Headers.parse_www_auth(value)
+                headers[u'WWW-Authenticate'] = Headers.parse_www_auth(value)
+            else:
+                headers[key] = value
         return headers
+
+class ResponseError(PatchboardError):
+    def __init__(self, response, message):
+        self.response = response
+        self.headers = response.parse_headers()
+        self.status_code = response.status_code
+        self.response = response
+        self.message = message
+
+    def __str__(self):
+        return self.message
