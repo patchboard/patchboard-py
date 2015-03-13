@@ -31,7 +31,7 @@ class Headers(object):
             name = challenge[0]
             pairs = challenge[1:]
             if len(pairs) == 0:
-                raise Exception("Invalid WWW-Authenticate header")
+                raise Exception("Invalid WWW-Authenticate header: {}".format(string) )
 
             challenges[name] = {}
 
@@ -40,6 +40,6 @@ class Headers(object):
                 if match:
                     challenges[name][match.group(1)] = match.group(2)
                 else:
-                    raise Exception("Invalid WWW-Authenticate header")
+                    raise Exception("Invalid WWW-Authenticate header: {}".format(string) )
 
         return challenges
