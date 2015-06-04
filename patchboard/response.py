@@ -9,8 +9,8 @@ from __future__ import unicode_literals
 
 import re
 
-from exception import PatchboardError
-from headers import Headers
+from .exception import PatchboardError
+from .headers import Headers
 
 class Response(object):
 

@@ -13,7 +13,7 @@ from __future__ import unicode_literals
 
 from types import MethodType
 
-from exception import PatchboardError
+from .exception import PatchboardError
 
 
 class Endpoints(object):

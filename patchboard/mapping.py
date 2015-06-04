@@ -12,7 +12,7 @@ try:
 except ImportError:
     from urllib.parse import quote_plus
 
-from exception import PatchboardError
+from .exception import PatchboardError
 
 
 class Mapping(object):

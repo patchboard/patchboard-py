@@ -7,8 +7,8 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from mapping import Mapping
-from util import SchemaStruct, SchemaArray
+from .mapping import Mapping
+from .util import SchemaStruct, SchemaArray
 
 
 class API(object):

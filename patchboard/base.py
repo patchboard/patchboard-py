@@ -11,12 +11,12 @@ import requests
 import collections
 import imp
 
-from resource import ResourceType
-from api import API
-from schema_manager import SchemaManager
-from client import Client
-from util import to_camel_case
-from exception import PatchboardError
+from .resource import ResourceType
+from .api import API
+from .schema_manager import SchemaManager
+from .client import Client
+from .util import to_camel_case
+from .exception import PatchboardError
 
 
 # Default module to hold resource classes

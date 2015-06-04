@@ -9,8 +9,8 @@ from __future__ import unicode_literals
 
 import json
 
-from action import Action
-from exception import PatchboardError
+from .action import Action
+from .exception import PatchboardError
 
 
 class ResourceType(type):

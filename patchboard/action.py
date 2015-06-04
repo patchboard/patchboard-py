@@ -8,8 +8,8 @@ from __future__ import unicode_literals
 
 import json
 
-from exception import PatchboardError
-from response import Response, ResponseError
+from .exception import PatchboardError
+from .response import Response, ResponseError
 
 
 class Action(object):
