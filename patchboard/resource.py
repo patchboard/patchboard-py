@@ -19,7 +19,7 @@ class ResourceType(type):
 
     # Must override to supply  default arguments
     def __new__(cls, name, patchboard, definition, schema, mapping):
-        return type.__new__(cls, name, (Resource,), {})
+        return type.__new__(cls, str(name), (Resource,), {})
 
     def __init__(cls, name, patchboard, definition, schema, mapping):
 
