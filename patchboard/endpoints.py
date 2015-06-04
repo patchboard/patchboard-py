@@ -9,6 +9,7 @@
 
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 from types import MethodType
 
@@ -27,7 +28,7 @@ class Endpoints(object):
                 cls = self.endpoint_classes[name]
             except KeyError:
                 raise PatchboardError(
-                    u"No resource class for mapping '{0}'".format(name))
+                    "No resource class for mapping '{0}'".format(name))
 
             if mapping.template or mapping.query:
                 # A mapping with a template or query property requires
@@ -42,7 +43,7 @@ class Endpoints(object):
                             url = params
                         else:
                             url = mapping.generate_url(params)
-                        return cls(context, {u'url': url})
+                        return cls(context, {'url': url})
                     return fn
                 setattr(self, name, bind(name, cls, mapping))
 
@@ -50,11 +51,11 @@ class Endpoints(object):
                 # When a mapping has the 'path' property, all that is needed to
                 # create a usable resource is the full URL.  Thus this endpoint
                 # method returns an instantiated resource directly.
-                setattr(self, name, cls(context, {u'url': mapping.generate_url()}))
+                setattr(self, name, cls(context, {'url': mapping.generate_url()}))
 
             elif mapping.url:
-                setattr(self, name, cls(context, {u'url': mapping.url}))
+                setattr(self, name, cls(context, {'url': mapping.url}))
 
             else:
-                raise PatchboardError(u"Mapping '{0}' is invalid".format(name))
+                raise PatchboardError("Mapping '{0}' is invalid".format(name))
 

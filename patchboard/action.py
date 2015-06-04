@@ -4,6 +4,7 @@
 # Copyright 2014 BitVault, Inc. dba Gem
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import json
 
@@ -19,34 +20,34 @@ class Action(object):
         self.patchboard = patchboard
         self.api = patchboard.api
         self.schema_manager = patchboard.schema_manager
-        self.method = definition[u'method']
+        self.method = definition['method']
 
         # Avoid using compression
-        self.headers = {u'accept-encoding': u'identity'}
+        self.headers = {'accept-encoding': 'identity'}
 
-        request = definition.get(u'request', None)
-        response = definition.get(u'response', None)
+        request = definition.get('request', None)
+        response = definition.get('response', None)
 
         self.request_schema = self.response_schema = None
 
         if request:
-            self.auth_schemes = request.get(u'authorization', [])
+            self.auth_schemes = request.get('authorization', [])
             if isinstance(self.auth_schemes, basestring):
                 self.auth_schemes = [self.auth_schemes]
 
-            if u'type' in request:
-                self.headers[u'Content-Type'] = request[u'type']
+            if 'type' in request:
+                self.headers['Content-Type'] = request['type']
                 self.request_schema = \
-                    self.schema_manager.find_media_type(request[u'type'])
+                    self.schema_manager.find_media_type(request['type'])
 
-        if response and u'type' in response:
+        if response and 'type' in response:
 
-            response_type = response[u'type']
-            self.headers[u'Accept'] = response_type
+            response_type = response['type']
+            self.headers['Accept'] = response_type
             self.response_schema = \
                 self.schema_manager.find_media_type(response_type)
 
-        self.success_status = response.get(u'status', 200)
+        self.success_status = response.get('status', 200)
 
     def request(self, resource, url, *args):
         options = self.prepare_request(resource, url, *args)
@@ -69,14 +70,14 @@ class Action(object):
         context = resource.context
         headers = dict(self.headers)
         options = {
-            u'url': url,
-            u'method': self.method,
-            u'headers': headers }
+            'url': url,
+            'method': self.method,
+            'headers': headers }
 
         input_options = self.process_args(args)
 
-        if (hasattr(self, u'auth_schemes') and
-            hasattr(context, u'authorizer') and
+        if (hasattr(self, 'auth_schemes') and
+            hasattr(context, 'authorizer') and
             callable(context.authorizer)):
 
             scheme, credential = context.authorizer(
@@ -84,14 +85,14 @@ class Action(object):
             headers["Authorization"] = "{0} {1}".format(
                 scheme, credential)
 
-        options[u'data'] = input_options.get(u'body', None)
+        options['data'] = input_options.get('body', None)
 
         # This code looks forward to the time when we have figured out
         # how we want Patchboard clients to take extra arguments for
         # requests.  Leaving it here now to show why process_args
         # returns a Hash, not just the body.
         try:
-            options[u'headers'].update(input_options[u'headers'])
+            options['headers'].update(input_options['headers'])
         except KeyError:
             pass
 
@@ -101,7 +102,7 @@ class Action(object):
 
         options = {}
         # TODO: This is weird.
-        signature = u'.'.join([type(arg).__name__ for arg in args])
+        signature = '.'.join([type(arg).__name__ for arg in args])
 
         request_schema = None
         try:
@@ -110,18 +111,18 @@ class Action(object):
             pass
 
         if request_schema:
-            if signature == u'str' or signature == u'unicode':
-                options[u'body'] = args[0]
-            elif signature == u'dict' or signature == u'list':
-                options[u'body'] = json.dumps(args[0])
+            if signature == 'str' or signature == 'unicode':
+                options['body'] = args[0]
+            elif signature == 'dict' or signature == 'list':
+                options['body'] = json.dumps(args[0])
             else:
                 raise PatchboardError(
-                    u"Invalid arguments for action: request content is required"
+                    "Invalid arguments for action: request content is required"
                 )
         else:
-            if signature == u"":
-                options[u'body'] = None
+            if signature == "":
+                options['body'] = None
             else:
-                raise PatchboardError(u"Invalid arguments for action")
+                raise PatchboardError("Invalid arguments for action")
 
         return options

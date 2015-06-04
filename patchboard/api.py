@@ -5,6 +5,7 @@
 
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 from mapping import Mapping
 from util import SchemaStruct, SchemaArray
@@ -17,12 +18,12 @@ class API(object):
 
     def __init__(self, definition):
 
-        self.service_url = definition.get(u'service_url', None)
+        self.service_url = definition.get('service_url', None)
 
         # Handle resources
         self.resources = definition['resources']
         for name, value in self.resources.iteritems():
-            value[u'name'] = name
+            value['name'] = name
 
         # Handle schemas
         # FIXME: test that schemas is really an array
@@ -34,9 +35,9 @@ class API(object):
             self.mappings[name] = Mapping(self, name, mapping)
 
     def find_mapping(self, schema):
-        id = schema.get(u'id', None) or schema.get(u'$ref', None)
+        id = schema.get('id', None) or schema.get('$ref', None)
         if id:
-            name = id.split(u'#')[-1]
+            name = id.split('#')[-1]
             return self.mappings.get(name, None)
         else:
             return None
@@ -54,7 +55,7 @@ class API(object):
             # Otherwise traverse the schema in search of subschemas
             # that have resource classes available.
 
-            items = schema.get(u'items', None)
+            items = schema.get('items', None)
             if items:
                 # TODO: handle the case where schema.items is an array,
                 # which signifies a tuple.  schema.additionalItems
@@ -63,7 +64,7 @@ class API(object):
                         for item in data]
                 data = SchemaArray(data)
 
-            properties = schema.get(u'properties', None)
+            properties = schema.get('properties', None)
             if properties:
                 for key, prop_schema in properties.iteritems():
                     value = data.get(key, None)
@@ -73,14 +74,14 @@ class API(object):
                             prop_schema,
                             value)
 
-            additionalProperties = schema.get(u'additionalProperties', None)
+            additionalProperties = schema.get('additionalProperties', None)
             if additionalProperties:
                 for key, value in data.iteritems():
-                    if (u'properties' not in schema or
-                            key not in schema[u'properties']):
+                    if ('properties' not in schema or
+                            key not in schema['properties']):
                         data[key] = self.decorate(
                             context,
-                            schema[u'additionalProperties'],
+                            schema['additionalProperties'],
                             value)
 
 

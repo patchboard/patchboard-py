@@ -5,6 +5,7 @@
 
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import json
 
@@ -28,8 +29,8 @@ class ResourceType(type):
         setattr(cls, 'mapping', mapping)
 
         if schema:
-            if u'properties' in schema:
-                for name, schema_def in schema[u'properties'].iteritems():
+            if 'properties' in schema:
+                for name, schema_def in schema['properties'].iteritems():
 
                     property_mapping = cls.api.find_mapping(schema_def)
                     if property_mapping:
@@ -38,10 +39,10 @@ class ResourceType(type):
                             # elsewhere
                             def bind_property_query(name, property_mapping):
                                 def fn(self, params={}):
-                                    params[u'url'] = self.attributes[name][u'url']
+                                    params['url'] = self.attributes[name]['url']
                                     url = property_mapping.generate_url(params)
                                     return property_mapping.cls(self.context,
-                                                                {u'url': url})
+                                                                {'url': url})
                                 return fn
                             setattr(cls, name, bind_property_query(
                                 name,
@@ -65,7 +66,7 @@ class ResourceType(type):
 
             # The 'is not False' only matters if additionalProperties is
             # None, basically--are these semantics critical?
-            if schema.get(u'additionalProperties', False) is not False:
+            if schema.get('additionalProperties', False) is not False:
                 def additional_fn(self, name):
                     # TODO: this may not be the correct semantics--
                     # in python we don't have access to the arguments and
@@ -87,7 +88,7 @@ class ResourceType(type):
                 lambda(self_, params): mapping.generate_url(params)))
 
         if definition:
-            actions = definition.get(u'actions', {})
+            actions = definition.get('actions', {})
             for name, action in actions.iteritems():
                 action = Action(patchboard, name, action)
 
@@ -110,9 +111,9 @@ class Resource(object):
         # TODO: non destructive decoration
         # TODO: add some sort of validation for the input attributes
 
-        class_schema = getattr(cls, u'schema', None)
+        class_schema = getattr(cls, 'schema', None)
         if class_schema:
-            properties = class_schema.get(u'properties', None)
+            properties = class_schema.get('properties', None)
             if properties:
                 for key, sub_schema in properties.iteritems():
                     value = attributes.get(key, None)
@@ -127,7 +128,7 @@ class Resource(object):
     def __init__(self, context, attributes={}):
         self.context = context
         self.attributes = self.decorate(self, attributes)
-        self.url = self.attributes.get(u'url', None)
+        self.url = self.attributes.get('url', None)
 
     # TODO: implement
     #def __str__(self):
@@ -148,7 +149,7 @@ class Resource(object):
         return (obj in self.attributes)
 
     def curl(self):
-        raise PatchboardError(u"Resource.curl() not implemented")
+        raise PatchboardError("Resource.curl() not implemented")
 
     def to_hash(self):
         return self.attributes

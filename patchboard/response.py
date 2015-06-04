@@ -5,6 +5,7 @@
 
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import re
 
@@ -13,13 +14,13 @@ from headers import Headers
 
 class Response(object):
 
-    content_pattern = re.compile(u'application/.*json')
+    content_pattern = re.compile('application/.*json')
 
     def __init__(self, raw):
         self.raw = raw
         self.data = None
         try:
-            if Response.content_pattern.search(raw.headers[u'Content-Type']):
+            if Response.content_pattern.search(raw.headers['Content-Type']):
                 self.data = raw.json()
         except KeyError:
             # If no Content-Type, don't care
@@ -39,8 +40,8 @@ class Response(object):
     def parse_headers(self):
         headers = {}
         for (key, value) in self.raw.headers.iteritems():
-            if u'www-authenticate' in key:
-                headers[u'WWW-Authenticate'] = Headers.parse_www_auth(value)
+            if 'www-authenticate' in key:
+                headers['WWW-Authenticate'] = Headers.parse_www_auth(value)
             else:
                 headers[key] = value
         return headers
