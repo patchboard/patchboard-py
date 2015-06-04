@@ -10,6 +10,7 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from future.utils import iteritems
 
 
 class SchemaManager(object):
@@ -26,7 +27,7 @@ class SchemaManager(object):
 
             # TODO: Is this test necessary?
             if 'definitions' in schema_source:
-                for name, schema in schema_source['definitions'].iteritems():
+                for name, schema in iteritems(schema_source['definitions']):
                     self.index_schema(source_id, name, schema)
 
     def index_schema(self, source_id, name, schema):

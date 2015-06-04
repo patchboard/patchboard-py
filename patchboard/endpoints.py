@@ -10,6 +10,8 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from future.utils import iteritems
+from past.builtins import basestring
 
 from types import MethodType
 
@@ -23,7 +25,7 @@ class Endpoints(object):
         self.api = api
         self.endpoint_classes = endpoint_classes
 
-        for name, mapping in self.api.mappings.iteritems():
+        for name, mapping in iteritems(self.api.mappings):
             try:
                 cls = self.endpoint_classes[name]
             except KeyError:

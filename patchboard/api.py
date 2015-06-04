@@ -6,6 +6,7 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from future.utils import iteritems
 
 from .mapping import Mapping
 from .util import SchemaStruct, SchemaArray
@@ -22,7 +23,7 @@ class API(object):
 
         # Handle resources
         self.resources = definition['resources']
-        for name, value in self.resources.iteritems():
+        for name, value in iteritems(self.resources):
             value['name'] = name
 
         # Handle schemas
@@ -31,7 +32,7 @@ class API(object):
 
         # Handle mappings
         self.mappings = {}
-        for name, mapping in definition['mappings'].iteritems():
+        for name, mapping in iteritems(definition['mappings']):
             self.mappings[name] = Mapping(self, name, mapping)
 
     def find_mapping(self, schema):
@@ -66,7 +67,7 @@ class API(object):
 
             properties = schema.get('properties', None)
             if properties:
-                for key, prop_schema in properties.iteritems():
+                for key, prop_schema in iteritems(properties):
                     value = data.get(key, None)
                     if value:
                         data[key] = self.decorate(
@@ -76,7 +77,7 @@ class API(object):
 
             additionalProperties = schema.get('additionalProperties', None)
             if additionalProperties:
-                for key, value in data.iteritems():
+                for key, value in iteritems(data):
                     if ('properties' not in schema or
                             key not in schema['properties']):
                         data[key] = self.decorate(

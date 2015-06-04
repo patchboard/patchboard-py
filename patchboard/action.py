@@ -5,6 +5,8 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from builtins import str
+from past.builtins import basestring
 
 import json
 
@@ -56,7 +58,7 @@ class Action(object):
         if response.status_code != self.success_status:
             err_msg = ("Unexpected response status: " +
                        str(response.status_code) +
-                       " - " + response.content)
+                       " - " + str(response.content))
             raise ResponseError(response, err_msg)
 
         out = self.api.decorate(resource.context,

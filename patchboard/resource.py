@@ -6,6 +6,7 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from future.utils import iteritems
 
 import json
 
@@ -30,7 +31,7 @@ class ResourceType(type):
 
         if schema:
             if 'properties' in schema:
-                for name, schema_def in schema['properties'].iteritems():
+                for name, schema_def in iteritems(schema['properties']):
 
                     property_mapping = cls.api.find_mapping(schema_def)
                     if property_mapping:
@@ -88,7 +89,7 @@ class ResourceType(type):
 
         if definition:
             actions = definition.get('actions', {})
-            for name, action in actions.iteritems():
+            for name, action in iteritems(actions):
                 action = Action(patchboard, name, action)
 
                 def bind_action(action):
@@ -114,7 +115,7 @@ class Resource(object):
         if class_schema:
             properties = class_schema.get('properties', None)
             if properties:
-                for key, sub_schema in properties.iteritems():
+                for key, sub_schema in iteritems(properties):
                     value = attributes.get(key, None)
                     mapping = cls.api.find_mapping(sub_schema)
                     if value and not mapping:

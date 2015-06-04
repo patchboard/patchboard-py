@@ -58,7 +58,7 @@ class Mapping(object):
 
         if self.query:
             parts = []
-            keys = self.query.keys()
+            keys = list(self.query.keys())
             keys.sort()
             # TODO check query schema
             for key in keys:

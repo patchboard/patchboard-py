@@ -6,6 +6,7 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from future.utils import iteritems
 
 import requests
 import collections
@@ -65,7 +66,7 @@ class Patchboard(object):
 
     default_headers = {
         'Accept': 'application/json',
-        'User-Agent': 'patchboard-py v0.5.0', }
+        'User-Agent': 'patchboard-py v0.5.1', }
 
     def __init__(self, api_spec, options={}):
 
@@ -95,7 +96,7 @@ class Patchboard(object):
 
     def create_endpoint_classes(self):
         classes = {}
-        for resource_name, mapping in self.api.mappings.iteritems():
+        for resource_name, mapping in iteritems(self.api.mappings):
             schema = self.schema_manager.find_name(resource_name)
             resource_def = mapping.resource
             class_name = to_camel_case(str(resource_name))

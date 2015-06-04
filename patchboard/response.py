@@ -6,6 +6,7 @@
 
 from __future__ import print_function
 from __future__ import unicode_literals
+from future.utils import iteritems
 
 import re
 
@@ -39,7 +40,7 @@ class Response(object):
 
     def parse_headers(self):
         headers = {}
-        for (key, value) in self.raw.headers.iteritems():
+        for (key, value) in iteritems(self.raw.headers):
             if 'www-authenticate' in key:
                 headers['WWW-Authenticate'] = Headers.parse_www_auth(value)
             else:
