@@ -58,4 +58,3 @@ class Endpoints(object):
 
             else:
                 raise PatchboardError("Mapping '{0}' is invalid".format(name))
-

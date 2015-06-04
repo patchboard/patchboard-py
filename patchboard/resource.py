@@ -84,8 +84,7 @@ class ResourceType(type):
         setattr(
             cls,
             'generate_url',
-            classmethod(
-                lambda(self_, params): mapping.generate_url(params)))
+            classmethod(lambda self_, params: mapping.generate_url(params)))
 
         if definition:
             actions = definition.get('actions', {})

@@ -7,7 +7,10 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from urllib import quote_plus
+try:
+    from urllib import quote_plus
+except ImportError:
+    from urllib.parse import quote_plus
 
 from exception import PatchboardError
 
