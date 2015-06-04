@@ -14,7 +14,10 @@ setup(name='patchboard',
       packages=find_packages(exclude=[
           u'*.tests', u'*.tests.*', u'tests.*', u'tests',
       ]),
-      install_requires=['requests'],
+      install_requires=[
+          'requests',
+          'future'
+      ],
       tests_require=[
         'pytest',
       ],
