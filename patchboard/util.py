@@ -23,6 +23,9 @@ class SchemaStruct(dict):
         # in the schema rather than exposing everything in the dict
         self.data = dict
 
+    def __contains__(self, item):
+        return item in self.data
+
     def __getattr__(self, name):
         try:
             return self.data[name]
